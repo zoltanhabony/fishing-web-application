@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import authConfig from "@/auth.config";
-import createMiddleware from 'next-intl/middleware';
 
 import {
   DEFAULT_LOGIN_REDIRECT,
