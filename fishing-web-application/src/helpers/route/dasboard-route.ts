@@ -1,5 +1,6 @@
 import { BookmarkIcon } from "@/icons/sidebar-icons/bookmark-icon"
 import { DashboardIcon } from "@/icons/sidebar-icons/dashboard-icon"
+import { HomeIcon } from "@/icons/sidebar-icons/home-icon"
 import { UserRole} from "@prisma/client"
 
 type RouteType = {
@@ -33,7 +34,7 @@ const logBook: RouteType = {
 const authority : RouteType = {
     href: "/authority",
     title: "Authority",
-    icon: BookmarkIcon,
+    icon: HomeIcon,
     role:  ["OPERATOR", "INSPECTOR"],
     access: {
         accessToAuthority: true
