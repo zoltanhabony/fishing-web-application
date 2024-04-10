@@ -8,10 +8,14 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/react";
-import { columns } from "./authority-cell";
 import { ReadonlyURLSearchParams} from "next/navigation";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
+type baseColumns = {
+  name: string,
+  uid: string,
+  sortable?:boolean
+}
 interface IReusableTableProps<T> {
   bottomContent: JSX.Element;
   topContent: JSX.Element;
@@ -24,6 +28,7 @@ interface IReusableTableProps<T> {
   pathname: string
   searchParams: ReadonlyURLSearchParams
   emptyContent: string
+  columns: baseColumns[]
 }
 
 type SortDirection = "ascending" | "descending";
@@ -53,7 +58,7 @@ export const ReusableTable = <T,>(props: IReusableTableProps<T>) => {
 
       
     >
-      <TableHeader columns={columns}>
+      <TableHeader columns={props.columns}>
         {(column) => (
           <TableColumn
             key={column.uid}

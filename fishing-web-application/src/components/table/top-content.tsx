@@ -48,7 +48,7 @@ export const TopContent = ({ numberOfAuthorities,router,pathname,searchParams }:
           onValueChange={onSearchChange}
         />
         <div className="flex gap-3">
-          <Button color="primary" onClick={() => router.push("/authority/new")}>
+          <Button color="primary" onClick={() => router.push(`${pathname}/new`)}>
             Add New
           </Button>
         </div>

@@ -42,8 +42,8 @@ model User {
   role                  UserRole               @default(USER)
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-  createdAt             DateTime               @default(now()) @db.Timestamptz(3)
-  updatedAt             DateTime               @default(now()) @updatedAt @db.Timestamptz(3)
+  createdAt             DateTime               @default(now()) @db.Date
+  updatedAt             DateTime               @default(now()) @updatedAt @db.Date
 
   accounts Account[]
   access   Access[]
@@ -65,6 +65,7 @@ model Account {
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@unique([provider, providerAccountId])
 }
 
@@ -74,82 +75,90 @@ model Member {
   id                 String @id @default(cuid())
   userId             String
   fisheryAuthorityId String
+  logbookId          String? @unique
 
   user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
+  logBook          Logbook?         @relation(fields: [logbookId], references: [id])
+}
+
+model Logbook {
+  id           String   @id @default(cuid())
+  serialNumber String   @default(cuid())
+  expiresDate  DateTime @db.Date
+  createdAt    DateTime @default(now()) @db.Date
+  member       Member?
 }
 
 model FisheryAuthority {
   id                   String @id @default(cuid())
   fisheryAuthorityName String @unique
   taxId                String @unique
-  waterAreaId String
-  addressId String @unique 
+  waterAreaId          String
+  addressId            String @unique
 
-  member Member[]
+  member    Member[]
   waterArea WaterArea @relation(fields: [waterAreaId], references: [id])
-  address Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  address   Address   @relation(fields: [addressId], references: [id], onDelete: Cascade)
 }
-
 
 //Helper
 model Address {
-  id           String @id @default(cuid())
-  cityId       String
-  streetName   String
-  streetNumber Int
-  floor        Int?
-  door         Int?
+  id               String            @id @default(cuid())
+  cityId           String
+  streetName       String
+  streetNumber     Int
+  floor            Int?
+  door             Int?
   fisheryAuthority FisheryAuthority?
-  city City @relation(fields: [cityId], references: [id]) 
+  city             City              @relation(fields: [cityId], references: [id])
 }
 
 model City {
-  id     String @id @default(cuid())
+  id         String    @id @default(cuid())
   postalCode Int
   cityName   String
   countyName String
-  address Address []
+  address    Address[]
 }
 
 model WaterArea {
-  id     String @id @default(cuid())
-  waterAreaCode String @unique
-  waterAreaName String
-  waterAreaType  WaterAreaType
+  id               String             @id @default(cuid())
+  waterAreaCode    String             @unique
+  waterAreaName    String
+  waterAreaType    WaterAreaType
   fisheryAuthority FisheryAuthority[]
 }
 
-
 model WaterAreaRule {
-  id     String @id @default(cuid())
-  waterAreaId String
-  fishId String
+  id           String @id @default(cuid())
+  waterAreaId  String
+  fishId       String
   constraintId String
 
-  fish Fish @relation(fields: [fishId], references: [id])
+  fish       Fish       @relation(fields: [fishId], references: [id])
   constraint Constraint @relation(fields: [constraintId], references: [id])
 }
 
 model Fish {
-  id     String @id @default(cuid())
-  fishCode       Int?     @unique
-  fishName String
+  id           String @id @default(cuid())
+  fishCode     Int?   @unique
+  fishName     String
   fishImageURL String
 
   waterAreaRule WaterAreaRule[]
 }
 
-
 model Constraint {
-  id     String @id @default(cuid())
-  weightLimit Decimal?
-  lengthLimit Decimal?
-  pieceLimit Int?
+  id             String          @id @default(cuid())
+  weightLimit    Decimal?
+  lengthLimit    Decimal?
+  pieceLimit     Int?
   banPeriodStart DateTime?
-  banPeriodEnd DateTime?
-  waterAreaRule WaterAreaRule[]
+  banPeriodEnd   DateTime?
+  waterAreaRule  WaterAreaRule[]
 }
+
 //Tokens
 
 model VerificationToken {

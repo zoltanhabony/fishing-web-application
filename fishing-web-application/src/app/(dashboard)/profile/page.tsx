@@ -6,7 +6,7 @@ import {
   Divider,
 } from "@nextui-org/react";
 import { UpdateProfileForm } from "@/components/auth/update-profile-form";
-import { FormSections } from "@/components/form-section";
+import { FormSections } from "@/components/form/form-section";
 import { getProfileData } from "@/actions/db-actions/profile-data";
 
 export default async function ProfilePage() {

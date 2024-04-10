@@ -12,7 +12,7 @@ import * as actions from "@/actions/index";
 import { useState } from "react";
 import { useCities, useWaterAreas } from "@/services/queries";
 import { useDebounce } from "use-debounce";
-import { InformationCard } from "./information-card";
+import { InformationCard } from "../information-card";
 
 interface EditAuthorityFormProps {
     data: authorityData

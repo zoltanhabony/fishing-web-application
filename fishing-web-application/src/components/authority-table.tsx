@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import { TopContent } from "./table/top-content";
 import { BottomContent } from "./table/bottom-content";
 import { ReusableTable } from "./table/reusable-table";
-import { authorityRenderCell } from "./table/authority-cell";
+import { authorityRenderCell, columns } from "./table/authority-cell";
 import React from "react";
 
 //interface to the table (data, allDataCountInDatabase)
@@ -55,6 +55,7 @@ export default function AuthorityTable({
   //add top-bottom content with props and add array of data to table
   return (
     <ReusableTable
+    columns={columns}
       bottomContent={
         <BottomContent
           pages={pages}

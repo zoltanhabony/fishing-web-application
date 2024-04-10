@@ -10,6 +10,26 @@ type waterAreaResponse = {
     ];
     message: string;
   };
+
+  type userResponse = {
+    users: [
+      {
+        id: string;
+        name: string;
+      }
+    ];
+    message: string;
+  };
+
+  type authorityResponse = {
+    authorities: [
+      {
+        id: string;
+        fisheryAuthorityName: string;
+      }
+    ];
+    message: string;
+  };
   
   type cityResponse = {
     cities: [
@@ -33,4 +53,18 @@ export function useCities(q:string){
         `/api/cityHandler/getAllCity?name=${q}`,
         fetcher
     );
+}
+
+export function useUsers(q:string){
+  return useSWR<userResponse>(
+      `/api/userHandler/getUsers?name=${q}`,
+      fetcher
+  );
+}
+
+export function useAuthorities(q:string){
+  return useSWR<authorityResponse>(
+      `/api/authorityHandler/getAuthorities?name=${q}`,
+      fetcher
+  );
 }
