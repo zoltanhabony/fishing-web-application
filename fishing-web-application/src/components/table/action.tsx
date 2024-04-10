@@ -12,6 +12,7 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { usePathname } from 'next/navigation'
 
 type Action<T> = {
   tooltip: string;
@@ -29,6 +30,7 @@ interface IActionsProps<V> {
 
 export const Actions = <A,>(props: IActionsProps<A>) => {
   const router = useRouter();
+  const pathname = usePathname()
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <div className="relative flex items-center">
@@ -40,7 +42,7 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
             variant="light"
             type="submit"
             onClick={() => {
-              router.push(`/authority/${props.detail?.id}`);
+              router.push(`${pathname}/${props.detail?.id}`);
             }}
           >
             <span className="text-lg text-default-800 cursor-pointer active:opacity-50">
@@ -56,7 +58,7 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
             aria-label="Edit"
             variant="light"
             onClick={() => {
-              router.push(`/authority/${props.edit?.id}/edit`);
+              router.push(`${pathname}/${props.edit?.id}/edit`);
             }}
           >
             <span className="text-lg text-primary cursor-pointer active:opacity-50">

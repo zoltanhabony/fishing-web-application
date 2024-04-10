@@ -1,47 +1,44 @@
-import { EditAuthorityForm } from "@/components/form/edit-authority-form";
-import notFound from "../not-found";
 import db from "@/lib/db";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { FormSections } from "@/components/form/form-section";
+import notFound from "../not-found";
+import { EditLogbookForm } from "@/components/form/edit-logbook-form";
 
-interface AuthorityEditPageProps {
+interface LogbookEditPageProps {
   params: {
     id: string;
   };
 }
-export default async function AuthorityEditPage(props: AuthorityEditPageProps) {
+export default async function AuthorityEditPage(props: LogbookEditPageProps) {
   const id = props.params.id;
 
-  const authority = await db.fisheryAuthority.findUnique({
+  const logbook = await db.logbook.findUnique({
     where: {
       id: id,
     },
     select: {
       id: true,
-      fisheryAuthorityName: true,
-      waterArea: {
+      expiresDate: true,
+      member: {
         select: {
-          waterAreaName: true,
-        },
-      },
-      taxId: true,
-      address: {
-        select: {
-          city: {
+          user: {
             select: {
-              cityName: true,
+              id: true,
+              name: true,
             },
           },
-          streetName: true,
-          streetNumber: true,
-          floor: true,
-          door: true,
+          fisheryAuthority: {
+            select: {
+              id: true,
+              fisheryAuthorityName: true,
+            },
+          },
         },
       },
     },
   });
 
-  if (!authority) {
+  if (!logbook) {
     return notFound();
   }
   return (
@@ -49,9 +46,7 @@ export default async function AuthorityEditPage(props: AuthorityEditPageProps) {
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
           <h1 className="text-[30px]">Edit Authority</h1>
-          <h2 className="text-primary font-bold">
-            {authority.fisheryAuthorityName}
-          </h2>
+          <h2 className="text-primary font-bold">{logbook.member?.user.name+"'s logbook"}</h2>
         </CardHeader>
         <CardBody>
           <div className="space-y-1">
@@ -60,7 +55,7 @@ export default async function AuthorityEditPage(props: AuthorityEditPageProps) {
               description="The following fields are required. These data will be necessary to identify the associations and to create the digital catch logbook"
             />
           </div>
-          <EditAuthorityForm data={authority} />
+          <EditLogbookForm data={logbook} />
         </CardBody>
       </Card>
     </div>

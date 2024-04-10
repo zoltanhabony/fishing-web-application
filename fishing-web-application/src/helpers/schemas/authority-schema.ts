@@ -13,7 +13,7 @@ export const createAuthoritySchema = z.object({
 })
 
 export const modifyAuthoritySchema = z.object({
-    id: z.string().min(1, {message:"The authority name is required"}),
+    id: z.string().min(1, {message:"The authority id is required"}),
     authorityName: z.string().min(1, {message:"The authority name is required"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Authority name should contain only alphabets'),
     waterAreaName: z.string().min(1, {message:"The water area name is required"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Water area name should contain only alphabets'),
     taxIdentifier: z.string().min(1, {message:"The tax identifier is required"}).max(11, {message:"The tax identifier contains 11 number"}).refine((value) => /^[1-9]{11}$/.test(value), 'Tax identifier should contain only number'),

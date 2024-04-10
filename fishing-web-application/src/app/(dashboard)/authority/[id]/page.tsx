@@ -1,7 +1,7 @@
 import db from "@/lib/db";
 import notFound from "./not-found";
 import { Card, CardBody, CardHeader, Snippet } from "@nextui-org/react";
-import { FormSections } from "@/components/form-section";
+import { FormSections } from "@/components/form/form-section";
 
 interface AuthorityShowPageProps {
   params: {
@@ -69,16 +69,16 @@ export default async function AuthorityShowPage(props: AuthorityShowPageProps) {
             />
           </div>
           <div className="w-full pt-3 space-y-3 pb-10">
-            <Snippet symbol="Tax Identifier: " size="sm" fullWidth className="overflow-scroll">
+            <Snippet symbol="Tax Identifier: " size="sm" fullWidth className=" overflow-auto">
               {authority.taxId}
             </Snippet>
-            <Snippet symbol="Water Area Code: " size="sm" fullWidth className="overflow-scroll">
+            <Snippet symbol="Water Area Code: " size="sm" fullWidth className=" overflow-auto">
               {authority.waterArea.waterAreaCode}
             </Snippet>
-            <Snippet symbol="Water Area Name: " size="sm" fullWidth className="overflow-scroll">
+            <Snippet symbol="Water Area Name: " size="sm" fullWidth className=" overflow-auto">
               {authority.waterArea.waterAreaName}
             </Snippet>
-            <Snippet symbol="Address: " size="sm" fullWidth className="overflow-scroll">
+            <Snippet symbol="Address: " size="sm" fullWidth className=" overflow-auto">
               {address}
             </Snippet>
           </div>
