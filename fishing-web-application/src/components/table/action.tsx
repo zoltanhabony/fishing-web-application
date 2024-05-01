@@ -14,27 +14,38 @@ import {
 import { useRouter } from "next/navigation";
 import { usePathname } from 'next/navigation'
 
+type deleteAction = {
+  deleteTitle: string,
+  deleteMessage: string
+}
+
+
 type Action<T> = {
   tooltip: string;
   action?: undefined | (() => Promise<T>);
   event?: () => void;
   id?: string;
   type: "submit" | "button" | "reset" | undefined;
+  permissonsToAction?:boolean
+  actionURL?:string
 };
 
 interface IActionsProps<V> {
   detail?: Action<V>;
   edit?: Action<V>;
-  delete?: Action<V>;
+  delete?: Action<V> & deleteAction;
 }
 
 export const Actions = <A,>(props: IActionsProps<A>) => {
   const router = useRouter();
   const pathname = usePathname()
+
+  console.log(props.detail?.actionURL)
+  
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (
     <div className="relative flex items-center">
-      <Tooltip content={props.detail?.tooltip}>
+       <Tooltip content={props.detail?.tooltip}>
         <form action={props.detail?.action ? props.detail?.action : () => null}>
           <Button
             isIconOnly
@@ -42,7 +53,7 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
             variant="light"
             type="submit"
             onClick={() => {
-              router.push(`${pathname}/${props.detail?.id}`);
+              props.detail?.actionURL ? router.push(props.detail?.actionURL) : router.push(`${pathname}/${props.detail?.id}`);
             }}
           >
             <span className="text-lg text-default-800 cursor-pointer active:opacity-50">
@@ -51,14 +62,15 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
           </Button>
         </form>
       </Tooltip>
-      <Tooltip color="primary" content={props.edit?.tooltip}>
+
+      {props.edit?.permissonsToAction !== false ? <Tooltip color="primary" content={props.edit?.tooltip}>
         <form action={props.edit?.action ? props.edit?.action : () => null}>
           <Button
             isIconOnly
             aria-label="Edit"
             variant="light"
             onClick={() => {
-              router.push(`${pathname}/${props.edit?.id}/edit`);
+              props.edit?.actionURL ? router.push(props.edit?.actionURL) : router.push(`${pathname}/${props.edit?.id}/edit`);
             }}
           >
             <span className="text-lg text-primary cursor-pointer active:opacity-50">
@@ -66,8 +78,9 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
             </span>
           </Button>
         </form>
-      </Tooltip>
-      <Tooltip color="danger" content={props.delete?.tooltip}>
+      </Tooltip> : ""}
+
+      {props.delete?.permissonsToAction !== false ? <Tooltip color="danger" content={props.delete?.tooltip}>
           <Button
             isIconOnly
             aria-label="Details"
@@ -79,20 +92,17 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
               <DeleteIcon />
             </span>
           </Button>
-      </Tooltip>
+      </Tooltip>:""}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Delete association
+                {props.delete?.deleteTitle || ""}
               </ModalHeader>
               <ModalBody>
                 <p>
-                  Deleting the association will delete all statistical data,
-                  catch logs, users and other specific settings from the system.
-                  The action cannot be undone, so please inform the members of
-                  the association of your decision before deleting!
+                 {props.delete?.deleteMessage || ""}
                 </p>
               </ModalBody>
               <ModalFooter>

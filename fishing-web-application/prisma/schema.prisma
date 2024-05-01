@@ -22,12 +22,11 @@ enum WaterAreaType {
   TOTAL_WATER_AREA
 }
 
-model Access {
-  id                String  @id @default(cuid())
-  userId            String  @unique
-  accessToLogbook   Boolean
-  accessToAuthority Boolean
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+enum UnitType {
+  MASS
+  LENGTH
+  TEMPERATURE
+  PIECE
 }
 
 model User {
@@ -45,9 +44,10 @@ model User {
   createdAt             DateTime               @default(now()) @db.Date
   updatedAt             DateTime               @default(now()) @updatedAt @db.Date
 
-  accounts Account[]
-  access   Access[]
-  member   Member[]
+  accounts  Account[]
+  access    Access[]
+  member    Member[]
+  IsFishing IsFishing[]
 }
 
 model Account {
@@ -69,17 +69,34 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+model Access {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  accessToLogbook   Boolean
+  accessToAuthority Boolean 
+  accessToFishing Boolean
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
 //Core Functions User-Logbook-Authority
 
+model IsFishing {
+  id                 String  @id @default(cuid())
+  userId String @unique
+  date   DateTime @db.Date
+
+  user User @relation(fields: [userId], references: [id])
+}
+
 model Member {
-  id                 String @id @default(cuid())
+  id                 String  @id @default(cuid())
   userId             String
   fisheryAuthorityId String
   logbookId          String? @unique
 
   user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
-  logBook          Logbook?         @relation(fields: [logbookId], references: [id])
+  logBook          Logbook?         @relation(fields: [logbookId], references: [id], onDelete: Cascade)
 }
 
 model Logbook {
@@ -88,6 +105,7 @@ model Logbook {
   expiresDate  DateTime @db.Date
   createdAt    DateTime @default(now()) @db.Date
   member       Member?
+  Catch        Catch[]
 }
 
 model FisheryAuthority {
@@ -100,6 +118,40 @@ model FisheryAuthority {
   member    Member[]
   waterArea WaterArea @relation(fields: [waterAreaId], references: [id])
   address   Address   @relation(fields: [addressId], references: [id], onDelete: Cascade)
+}
+
+model Catch {
+  id          String   @id @default(cuid())
+  logbookId   String
+  waterAreaId String
+  fishId      String
+  createdAt   DateTime @default(now())
+  isInjured   Boolean?
+  detailId    String   @unique @default(cuid())
+  isStored    Boolean  @default(false)
+
+  logbook      Logbook        @relation(fields: [logbookId], references: [id], onDelete: Cascade)
+  waterArea    WaterArea      @relation(fields: [waterAreaId], references: [id])
+  fish         Fish           @relation(fields: [fishId], references: [id])
+  CatchDetails CatchDetails[]
+}
+
+model CatchDetails {
+  id       String  @id @default(cuid())
+  value    Decimal
+  unitId   String
+  detailId String
+
+  catch Catch @relation(fields: [detailId], references: [detailId], onDelete: Cascade)
+  unit  Unit  @relation(fields: [unitId], references: [id])
+}
+
+model Unit {
+  id           String         @id @default(cuid())
+  unitType     UnitType
+  unitName     String
+  unitAcronyms String
+  CatchDetails CatchDetails[]
 }
 
 //Helper
@@ -128,6 +180,7 @@ model WaterArea {
   waterAreaName    String
   waterAreaType    WaterAreaType
   fisheryAuthority FisheryAuthority[]
+  Catch            Catch[]
 }
 
 model WaterAreaRule {
@@ -147,12 +200,15 @@ model Fish {
   fishImageURL String
 
   waterAreaRule WaterAreaRule[]
+  Catch         Catch[]
 }
 
 model Constraint {
   id             String          @id @default(cuid())
-  weightLimit    Decimal?
-  lengthLimit    Decimal?
+  minWeightLimit    Decimal?
+  maxWeightLimit    Decimal?
+  minLengthLimit    Decimal?
+  maxLengthLimit    Decimal?
   pieceLimit     Int?
   banPeriodStart DateTime?
   banPeriodEnd   DateTime?

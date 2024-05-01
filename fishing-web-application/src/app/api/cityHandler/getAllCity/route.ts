@@ -9,7 +9,7 @@ type city = {
 
 export async function GET(request: NextRequest) {
 
-        const session = await auth()
+    const session = await auth();
         if(session){
             if(session.user.role === "OPERATOR" || session.user.role === "ADMIN"){
 

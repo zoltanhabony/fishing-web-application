@@ -100,6 +100,7 @@ export async function modifyLogbook(
     },
   });
 
+
   if(!user){
     return {
       errors: {
@@ -184,7 +185,7 @@ export async function modifyLogbook(
         fisheryAuthorityId: authority.id
       }
     })
-    revalidatePath(`/logbook`);
+    revalidatePath("/member/[id]/edit")
 
     
 

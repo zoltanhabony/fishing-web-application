@@ -16,6 +16,8 @@ import {
 import { useDebounce } from "use-debounce";
 import { InformationCard } from "../information-card";
 import { NameTagIcon } from "@/icons/name-tag-icon";
+import { EditIcon } from "@/icons/edit-icon";
+import { CancelIcon } from "@/icons/cancel-icon";
 
 type authority = {
   id: string;
@@ -32,8 +34,8 @@ interface EditLogbookFormProps {
 }
 
 type logbookData = {
-  id: string;
-  expiresDate: Date;
+  id: string
+  expiresDate: Date
   member: {
     user: {
       id: string;
@@ -43,10 +45,11 @@ type logbookData = {
       id: string;
       fisheryAuthorityName: string;
     };
-  } | null;
+  }| null;
 };
 
 export const EditLogbookForm = (data: EditLogbookFormProps) => {
+  const [isReadonly, setIsReadonly] = useState<boolean>(true);
   const [authority, setAuthority] = useState<string>("");
   const [user, setUser] = useState<string>("");
 
@@ -67,18 +70,28 @@ export const EditLogbookForm = (data: EditLogbookFormProps) => {
   const onUserInputChange = (value: string) => {
     setUser(value);
   };
+  console.log(data.data.member?.user.name)
 
   const year = data.data.expiresDate.getFullYear()
   const month = data.data.expiresDate.getMonth().toString().length === 1 ? "0" + (data.data.expiresDate.getMonth()+1) : data.data.expiresDate.getMonth()+1
   const day = data.data.expiresDate.getDate().toString().length === 1 ? "0" + data.data.expiresDate.getDate(): data.data.expiresDate.getDate()
 
-  console.log(year+"-"+month+"-"+day)
-
   return (
     <>
       <form action={action} className="space-y-3 w-full pt-3">
+      <Button
+          size="sm"
+          className="hover:bg-transparent pl-1"
+          color={isReadonly ? "primary" : "danger"}
+          onClick={() => setIsReadonly((a) => !a)}
+          variant="light"
+          endContent={isReadonly ? <EditIcon /> : <CancelIcon />}
+        >
+          {isReadonly ? "Edit logbook" : "Discard editing"}
+        </Button>
         <div className="flex flex-col gap-4 w-full">
           <Autocomplete
+            isDisabled={isReadonly}
             defaultInputValue={data.data.member?.user.name ? data.data.member?.user.name : ""}
             name="userName"
             label="User"
@@ -114,6 +127,7 @@ export const EditLogbookForm = (data: EditLogbookFormProps) => {
                 })}
           </Autocomplete>
           <Autocomplete
+          isDisabled={isReadonly}
           defaultInputValue={data.data.member?.fisheryAuthority.fisheryAuthorityName}
             name="fisheryAuthorityName"
             label="Authority"
@@ -149,6 +163,7 @@ export const EditLogbookForm = (data: EditLogbookFormProps) => {
                 })}
           </Autocomplete>
           <Input
+            isDisabled={isReadonly}
             defaultValue={year+"-"+month+"-"+day}
             name="expiresDate"
             label="Expires Date"
@@ -163,6 +178,7 @@ export const EditLogbookForm = (data: EditLogbookFormProps) => {
             }
           />
           <Input
+            isDisabled={isReadonly}
             defaultValue={data.data.id}
             name="id"
             label="Id"
@@ -188,8 +204,8 @@ export const EditLogbookForm = (data: EditLogbookFormProps) => {
         ) : (
           ""
         )}
-        <Button color="primary" fullWidth type="submit" className="mt-3">
-          Create Logbook
+        <Button color="primary" fullWidth type="submit" className="mt-3" isDisabled={isReadonly}>
+          Update Logbook
         </Button>
       </form>
     </>

@@ -2,26 +2,42 @@
 import { Button, Input, Select, SelectItem } from "@nextui-org/react";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { ReadonlyURLSearchParams} from "next/navigation";
+import { useEffect, useState } from "react";
+import { useDebounce } from "use-debounce";
 
 interface TopContentProps {
-  numberOfAuthorities: number;
+  numberOfData: number;
   router: AppRouterInstance
   pathname: string
-  searchParams: ReadonlyURLSearchParams
+  searchParams: ReadonlyURLSearchParams;
+  searchByTitle: string
+  buttonTitle: string
+  buttonIsAvailable: boolean
+  filterElement?: JSX.Element;
+  buttonURL?: string
 }
 
 
-export const TopContent = ({ numberOfAuthorities,router,pathname,searchParams }: TopContentProps) => {
-  const onSearchChange = (value?: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) {
-      params.set('search', value);
-      params.set('page', "1");
-    } else {
-      params.delete('search')
-    }
-    router.replace(`${pathname}?${params.toString()}`);
+export const TopContent = ({ numberOfData,router,pathname,searchParams, searchByTitle, buttonTitle, buttonIsAvailable, filterElement, buttonURL }: TopContentProps) => {
+
+  const [search, setSearch] = useState<string>("");
+  const [debounceSearch] = useDebounce<string>(search, 500);
+  const onSearchChange = (value: string) => {
+    setSearch(value);
   };
+  
+  useEffect(()=>{
+      const params = new URLSearchParams(searchParams)
+      if (debounceSearch) {
+        params.set('search', debounceSearch);
+        params.set('page', "1");
+      } else {
+        params.delete('search')
+      }
+      router.replace(`${pathname}?${params.toString()}`);
+  }, [debounceSearch, pathname, router, search, searchParams])
+  
+  
 
   const onClear = () => {
     const params = new URLSearchParams(searchParams.toString());
@@ -38,24 +54,31 @@ export const TopContent = ({ numberOfAuthorities,router,pathname,searchParams }:
   return (
     <div className="flex flex-col gap-4">
       <div className="flex justify-between gap-3 items-end">
+        <div className="w-full">
+        <h5 className="text-sm pb-2">Search</h5>
         <Input
           isClearable
-          size="sm"
+          size="md"
           className="w-full sm:max-w-[44%]"
-          placeholder="Search by name..."
-          value={searchParams.get("search") ? String(searchParams.get("search")): ""}
+          placeholder={searchByTitle}
+          value={search}
           onClear={() => onClear()}
           onValueChange={onSearchChange}
         />
+        </div>
         <div className="flex gap-3">
-          <Button color="primary" onClick={() => router.push(`${pathname}/new`)}>
-            Add New
-          </Button>
+          {buttonIsAvailable ? <Button color="primary" onClick={() => { buttonURL ? router.push(buttonURL): router.push(`${pathname}/new`)}}>
+            {buttonTitle}
+          </Button> : ""}
         </div>
       </div>
+      {filterElement ? <div>
+        <h5 className="text-sm pb-2">Filters</h5>
+        {filterElement}
+      </div> : ""}
       <div className="flex justify-between items-center">
         <span className="text-default-400 text-small">
-          Total {numberOfAuthorities} authorities
+          Total {numberOfData} row
         </span>
         <Select
           size="sm"
@@ -78,6 +101,7 @@ export const TopContent = ({ numberOfAuthorities,router,pathname,searchParams }:
           </SelectItem>
         </Select>
       </div>
+      <h5 className="text-sm pb-2">Table</h5> 
     </div>
   );
 };

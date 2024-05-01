@@ -148,6 +148,16 @@ export async function createLogbook(
       }
     })
 
+    await db.access.update({
+      where:{
+        userId:user.id
+      },
+      data:{
+        accessToLogbook: true,
+        accessToFishing:true
+      }
+    })
+
     return {
       errors: {
         _form: ["The logbook created successfully"],

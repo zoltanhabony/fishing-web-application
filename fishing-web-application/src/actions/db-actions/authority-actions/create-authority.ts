@@ -71,6 +71,23 @@ export async function  createAuthority(
     }
   }
 
+  const user = await db.user.findUnique({
+    where: {
+      email: session.user.email
+    }
+  })
+
+  if(!user){
+    return {
+      errors: {
+        _form: ["The creation failed!"],
+        subtitle: "User not found!",
+        status: "error",
+        description: "User not found with current user email!",
+      },
+    }
+  }
+
   const authority = await db.fisheryAuthority.findFirst({
     where:{
       fisheryAuthorityName: data.authorityName?.toString()
@@ -177,12 +194,19 @@ export async function  createAuthority(
       }
     })
 
-    await db.fisheryAuthority.create({
+    const authority = await db.fisheryAuthority.create({
       data:{
         fisheryAuthorityName: result.data.authorityName,
         taxId: result.data.taxIdentifier,
         waterAreaId: waterArea.id,
         addressId: address.id
+      }
+    })
+
+    await db.member.create({
+      data:{
+        userId: user?.id,
+        fisheryAuthorityId: authority.id
       }
     })
 
