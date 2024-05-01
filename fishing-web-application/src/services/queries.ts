@@ -41,6 +41,25 @@ type waterAreaResponse = {
     message: string;
   };
 
+  type fishResponse = {
+    fishes: [
+      {
+        id: string;
+        fishName: string;
+      }
+    ]
+  }
+
+  type unitResponse = {
+    units: [
+      {
+        id: string;
+        unitName: string;
+        unitAcronyms: string;
+      }
+    ]
+  }
+
 export function useWaterAreas(q:string){
     return useSWR<waterAreaResponse>(
         `/api/waterAreaHandler/getAllWaterArea?name=${q}`,
@@ -65,6 +84,20 @@ export function useUsers(q:string){
 export function useAuthorities(q:string){
   return useSWR<authorityResponse>(
       `/api/authorityHandler/getAuthorities?name=${q}`,
+      fetcher
+  );
+}
+
+export function useFishes(){
+  return useSWR<fishResponse>(
+      "/api/fishHandler/getAllFish",
+      fetcher
+  );
+}
+
+export function useUnits(q:string){
+  return useSWR<unitResponse>(
+      `/api/unitHandler/getAllUnitByType?type=${q}`,
       fetcher
   );
 }

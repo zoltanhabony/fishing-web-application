@@ -54,6 +54,7 @@ export const {
           userId: user.id as string,
           accessToLogbook: false,
           accessToAuthority: false,
+          accessToFishing:false,
         }
       })
     },

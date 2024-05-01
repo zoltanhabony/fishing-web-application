@@ -13,6 +13,7 @@ import { useState } from "react";
 import { useCities, useWaterAreas } from "@/services/queries";
 import { useDebounce } from "use-debounce";
 import { InformationCard } from "../information-card";
+import { FormSections } from "./form-section";
 
 type waterArea = {
   id: string;
@@ -115,6 +116,11 @@ export const CreateAuthorityForm = () => {
             endContent={
               <NameTagIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
             }
+          />
+          <FormSections
+            size="secondary"
+            title="Address details"
+            description="The address details are required to inform customers and to compile the catch logbook"
           />
            <Autocomplete
             name="cityName"

@@ -49,3 +49,23 @@ export const settingsSchema = z.object({
     lastName: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets'))
 })
 
+export const memberSchema = z.object({
+  userId:z.string().min(1, {message:"The user id is required"}),
+  email: z
+      .string()
+      .min(1,{
+        message: "The email is required",
+      }).email("The email is invalid"),
+  username: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets')),
+  firstName: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets')),
+  lastName: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets')),
+  role: z.optional(z.string().min(1, {message:"The role is required"}).min(3, {message:"The role must be USER or INSPECTOR"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'The role should contain only alphabets'))
+})
+
+export const memberPermissonSchema = z.object({
+  userId:z.string().min(1, {message:"The user id is required"}),
+  accessToAuthority: z.boolean(),
+  accessToFishing: z.boolean(),
+  accessToLogbook: z.boolean(),
+})
+

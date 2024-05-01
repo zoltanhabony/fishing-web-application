@@ -23,19 +23,22 @@ export const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 type authorityTableResponse = {
-  id: string
-  fisheryAuthorityName: string
-  taxId: string
-  address: {
-    city: {
-      cityName: string
-    };
-    streetName: string,
-    streetNumber: number
-    floor: number | null
-    door: number | null
+  id: string;
+  fisheryAuthority: {
+      id: string;
+      fisheryAuthorityName: string;
+      taxId: string;
+      address: {
+          streetName: string;
+          streetNumber: number;
+          floor: number | null;
+          door: number | null;
+          city: {
+            cityName: string,
+          };
+      };
   };
-};
+}
 
 export const authorityRenderCell = (
   authority: authorityTableResponse,
@@ -44,18 +47,18 @@ export const authorityRenderCell = (
   const cellValue = authority[columnKey as keyof authorityTableResponse];
   switch (columnKey) {
     case "id":
-      return authority.id;
+      return authority.fisheryAuthority.id;
     case "fisheryAuthorityName":
-      return authority.fisheryAuthorityName;
+      return authority.fisheryAuthority.fisheryAuthorityName;
     case "taxId":
-      return authority.taxId;
+      return authority.fisheryAuthority.taxId;
     case "cityName":
-      return authority.address.city.cityName;
+      return authority.fisheryAuthority.address.city.cityName;
     case "address":
-      return authority.address.streetName + " " + authority.address.streetNumber;
+      return authority.fisheryAuthority.address.streetName + " " + authority.fisheryAuthority.address.streetNumber;
     case "actions":
-      const removeAuthority = removefisheryAuthorities.bind(null, authority.id)
-      const id = authority.id 
+      const removeAuthority = removefisheryAuthorities.bind(null, authority.fisheryAuthority.id)
+      const id = authority.fisheryAuthority.id 
       return (
         <Actions delete={{tooltip: "Delete", action: removeAuthority, type:"submit"}} detail={{tooltip: "Detail", type:"button", id:id}} edit={{tooltip: "Edit", type:"button", id:id}}/>
       );

@@ -11,16 +11,19 @@ import React from "react";
 //interface to the table (data, allDataCountInDatabase)
 type authorityTableResponse = {
   id: string;
-  fisheryAuthorityName: string;
-  taxId: string;
-  address: {
-    city: {
-      cityName: string;
-    };
-    streetName: string;
-    streetNumber: number;
-    floor: number | null;
-    door: number | null;
+  fisheryAuthority: {
+      id: string;
+      fisheryAuthorityName: string;
+      taxId: string;
+      address: {
+          streetName: string;
+          streetNumber: number;
+          floor: number | null;
+          door: number | null;
+          city: {
+            cityName: string,
+          };
+      };
   };
 };
 
@@ -33,6 +36,7 @@ export default function AuthorityTable({
   authorities,
   numberOfAuthorities,
 }: AuthorityTableProps) {
+
 
   //Get search params for manage table
   const router = useRouter();
@@ -66,11 +70,10 @@ export default function AuthorityTable({
       }
       topContent={
         <TopContent
-          numberOfAuthorities={numberOfAuthorities}
+          numberOfData={numberOfAuthorities}
           router={router}
           searchParams={searchParams}
-          pathname={pathname}
-        />
+          pathname={pathname} searchByTitle={"Search by authority name"} buttonTitle={"Create Authority"} buttonIsAvailable={true}/>
       }
       data={authorities}
       renderCell={renderCell}

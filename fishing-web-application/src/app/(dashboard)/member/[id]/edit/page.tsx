@@ -1,20 +1,43 @@
+import { EditAuthorityForm } from "@/components/form/edit-authority-form";
+import notFound from "../../../catch/[id]/not-found";
 import db from "@/lib/db";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
-import { FormSections } from "@/components/form/form-section";
-import notFound from "../not-found";
-import { EditLogbookForm } from "@/components/form/edit-logbook-form";
+import { Card, CardBody, CardHeader} from "@nextui-org/react";
+import { EditMemberTabs } from "@/components/edit-member-tabs";
 
-interface LogbookEditPageProps {
+interface AuthorityEditPageProps {
   params: {
     id: string;
   };
 }
-export default async function AuthorityEditPage(props: LogbookEditPageProps) {
+export default async function AuthorityEditPage(props: AuthorityEditPageProps) {
   const id = props.params.id;
 
-  const logbook = await db.logbook.findUnique({
+  const user = await db.user.findUnique({
     where: {
       id: id,
+    },
+    select: {
+      id: true,
+      name: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      access: true,
+      role: true,
+    },
+  });
+
+  if (!user) {
+    return notFound();
+  }
+
+  const logbook = await db.logbook.findFirst({
+    where: {
+      member: {
+        user: {
+          id: id,
+        },
+      },
     },
     select: {
       id: true,
@@ -38,26 +61,18 @@ export default async function AuthorityEditPage(props: LogbookEditPageProps) {
     },
   });
 
-  if (!logbook) {
-    return notFound();
-  }
   return (
     <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-          <h1 className="text-[30px]">Edit Authority</h1>
-          <h2 className="text-primary font-bold">{logbook.member?.user.name+"'s logbook"}</h2>
+          <h1 className="text-[30px]">Edit Member</h1>
+          <h2 className="text-primary font-bold">{user.name}</h2>
         </CardHeader>
         <CardBody>
-          <div className="space-y-1">
-            <FormSections
-              title="Edit Authority Data"
-              description="The following fields are required. These data will be necessary to identify the associations and to create the digital catch logbook"
-            />
-          </div>
-          <EditLogbookForm data={logbook} />
+          <EditMemberTabs user={user} logbook={logbook}/>
         </CardBody>
       </Card>
     </div>
   );
 }
+

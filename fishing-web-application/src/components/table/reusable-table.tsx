@@ -35,8 +35,7 @@ type SortDirection = "ascending" | "descending";
 
 export const ReusableTable = <T,>(props: IReusableTableProps<T>) => {
   return (
-    <Table
-      aria-label="Example table with custom cells, pagination and sorting"
+      <Table
       isHeaderSticky
       bottomContent={props.bottomContent}
       bottomContentPlacement="outside"

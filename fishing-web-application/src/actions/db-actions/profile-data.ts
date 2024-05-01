@@ -14,7 +14,29 @@ export async function getProfileData() {
             email:true,
             firstName:true,
             lastName: true,
-            image:true
+            image:true,
+            member:{
+                select:{
+                    logBook:{
+                        select:{
+                            id: true,
+                            expiresDate: true,
+                        }
+                    },
+                    fisheryAuthority: {
+                        select: {
+                          id: true,
+                          fisheryAuthorityName: true,
+                          waterArea: {
+                            select: {
+                              waterAreaCode: true,
+                              waterAreaName: true,
+                            },
+                          },
+                        },
+                      },
+                }
+            }
         }
     })
 

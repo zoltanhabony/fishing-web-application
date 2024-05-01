@@ -15,6 +15,7 @@ export const UserCard = (props: UserCardProps) => {
 <div className="w-full bg-default-50 rounded-xl shadow">
     <div className="flex flex-col items-center justify-center p-4 min-h-[200px]"> 
     <Avatar
+            name={props.firstName + props.lastName}
             isBordered
             color="default"
             src={props.imgUrl}

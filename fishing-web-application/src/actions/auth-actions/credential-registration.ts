@@ -118,6 +118,7 @@ export async function  credentialRegistration(
         userId: user.id,
         accessToLogbook: false,
         accessToAuthority: false,
+        accessToFishing: false
       }
     })
   } catch (error) {
