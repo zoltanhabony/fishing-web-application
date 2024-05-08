@@ -73,16 +73,16 @@ model Access {
   id                String  @id @default(cuid())
   userId            String  @unique
   accessToLogbook   Boolean
-  accessToAuthority Boolean 
-  accessToFishing Boolean
+  accessToAuthority Boolean
+  accessToFishing   Boolean
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 //Core Functions User-Logbook-Authority
 
 model IsFishing {
-  id                 String  @id @default(cuid())
-  userId String @unique
+  id     String   @id @default(cuid())
+  userId String   @unique
   date   DateTime @db.Date
 
   user User @relation(fields: [userId], references: [id])
@@ -97,6 +97,8 @@ model Member {
   user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
   logBook          Logbook?         @relation(fields: [logbookId], references: [id], onDelete: Cascade)
+  Map              Map[]
+  Marker           Marker[]
 }
 
 model Logbook {
@@ -118,6 +120,7 @@ model FisheryAuthority {
   member    Member[]
   waterArea WaterArea @relation(fields: [waterAreaId], references: [id])
   address   Address   @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  Map       Map?
 }
 
 model Catch {
@@ -205,14 +208,52 @@ model Fish {
 
 model Constraint {
   id             String          @id @default(cuid())
-  minWeightLimit    Decimal?
-  maxWeightLimit    Decimal?
-  minLengthLimit    Decimal?
-  maxLengthLimit    Decimal?
+  minWeightLimit Decimal?
+  maxWeightLimit Decimal?
+  minLengthLimit Decimal?
+  maxLengthLimit Decimal?
   pieceLimit     Int?
   banPeriodStart DateTime?
   banPeriodEnd   DateTime?
   waterAreaRule  WaterAreaRule[]
+}
+
+//Map
+
+model Map {
+  id                 String  @id @default(cuid())
+  lat                Decimal
+  long               Decimal
+  zoom               Int
+  memberId           String
+  fisheryAuthorityId String  @unique
+
+  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
+  member           Member           @relation(fields: [memberId], references: [id])
+  Marker           Marker[]
+}
+
+model Marker {
+  id           String   @id @default(cuid())
+  lat          Decimal
+  long         Decimal
+  mapId        String
+  memberId     String
+  title        String
+  info         String
+  markerTypeId String
+  createdAt    DateTime @default(now()) @db.Date
+
+  map        Map        @relation(fields: [mapId], references: [id])
+  member     Member     @relation(fields: [memberId], references: [id])
+  markerType MarkerType @relation(fields: [markerTypeId], references: [id])
+}
+
+model MarkerType {
+  id     String   @id @default(cuid())
+  type   String
+  markerURL String
+  marker Marker[]
 }
 
 //Tokens

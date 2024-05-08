@@ -15,3 +15,10 @@ export { editCatch } from "./db-actions/catch-actions/edit-catch";
 export { createFishingDate } from "./db-actions/fishing-date-action/create-fishing-date";
 export { updateMemberDetails } from "./db-actions/member-actions/edit-member-details";
 export { updateMemberPermissions } from "./db-actions/member-actions/modify-member-permissons";
+export { createMap } from "./db-actions/map-actions/create-map"
+export { createMarker } from "./db-actions/map-actions/create-marker"
+export { editMap } from "./db-actions/map-actions/edit-map"
+export { editMarker } from "./db-actions/map-actions/edit-marker"
+export { deleteMap } from "./db-actions/map-actions/delete-map"
+export { deleteMarker } from "./db-actions/map-actions/delete-marker"
+

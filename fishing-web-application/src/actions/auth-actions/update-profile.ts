@@ -5,6 +5,7 @@ import * as schemas from "@/helpers/schemas/validation-schema";
 import { getUserById } from "@/data/user";
 import { currentUser } from "@/lib/current-user";
 import { DefaultSession } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 interface SettingsFormState {
   errors: {
@@ -90,9 +91,13 @@ export const updateProfile = async (
       id: dbUser.id,
     },
     data: {
-      name: data.username as string,
+      name: result.data.username,
+      firstName: result.data.firstName,
+      lastName: result.data.lastName
     },
   });
+
+  revalidatePath("/profile")
 
   return {
     errors: {
