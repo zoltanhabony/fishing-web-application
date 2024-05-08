@@ -4,6 +4,7 @@ import { BookmarkIcon } from "@/icons/sidebar-icons/bookmark-icon"
 import { DashboardIcon } from "@/icons/sidebar-icons/dashboard-icon"
 import { FishIcon } from "@/icons/sidebar-icons/fish-icon"
 import { HomeIcon } from "@/icons/sidebar-icons/home-icon"
+import { MapIcon } from "@/icons/sidebar-icons/map-icon"
 import { UserRole} from "@prisma/client"
 
 type RouteType = {
@@ -64,11 +65,19 @@ const member : RouteType = {
     }
 }
 
+const map : RouteType = {
+    href: "/map",
+    title: "Map",
+    icon: MapIcon,
+    role:  ["OPERATOR", "INSPECTOR", "USER"],
+    access:{}
+}
+
 
 export const defaultRoutes: RouteType[] = [
     dashboard,
 ]
 
 export const mainMenuRoutes: RouteType[] = [
-    logBook, authority, catches, member
+    logBook, authority, catches, member, map
 ]

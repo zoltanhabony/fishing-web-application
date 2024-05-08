@@ -72,7 +72,6 @@ export default async function LogBookPage({
     direction,
     isSaved
   );
-  console.log(catches.catches);
 
   if (session.user.role === "USER") {
     return (

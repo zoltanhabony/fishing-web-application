@@ -60,7 +60,7 @@ export const authorityRenderCell = (
       const removeAuthority = removefisheryAuthorities.bind(null, authority.fisheryAuthority.id)
       const id = authority.fisheryAuthority.id 
       return (
-        <Actions delete={{tooltip: "Delete", action: removeAuthority, type:"submit"}} detail={{tooltip: "Detail", type:"button", id:id}} edit={{tooltip: "Edit", type:"button", id:id}}/>
+        <Actions delete={{tooltip: "Delete", action: removeAuthority, type:"submit", deleteTitle:"Delete Authority", deleteMessage:""}} detail={{tooltip: "Detail", type:"button", id:id}} edit={{tooltip: "Edit", type:"button", id:id}}/>
       );
     default:
       return cellValue;

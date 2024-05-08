@@ -2,6 +2,7 @@ import waterAreas from "./waterAreas.json";
 import postalCodes from "./postalCodes.json";
 import fishes from "./fishes.json";
 import unit from "./unit.json";
+import markerType from "./markerType.json"
 import { PrismaClient, UnitType, WaterAreaType } from "@prisma/client";
 
 type area = {
@@ -39,6 +40,11 @@ type newUnitType = {
   unitName: string;
   unitAcronyms: string;
 };
+
+type markerType = {
+  type: string,
+  markerURL: string
+}
 
 type fish = {
   "Hal kódja": string;
@@ -86,6 +92,7 @@ export const seed = async () => {
   let newFish: newFish[] = [];
   let newConstraints: newConstraints[] = [];
   let newUnit: newUnitType[] = [];
+  let newMarkerType: markerType[] = []
 
   waterAreas.map((area: area) => {
     let waterAreaType;
@@ -178,6 +185,15 @@ export const seed = async () => {
     });
   });
 
+  markerType.map(type => {
+    newMarkerType.push({
+      type: type.markerType,
+      markerURL: type.markerURL,
+    })
+  })
+
+  /*
+
   
   await db.waterArea.createMany({
     data: newWaterArea,
@@ -225,6 +241,12 @@ export const seed = async () => {
   await db.unit.createMany({
     data: newUnit,
   });
+  */
+
+  await db.markerType.createMany({
+    data: newMarkerType,
+  })
+
 };
 
 seed()

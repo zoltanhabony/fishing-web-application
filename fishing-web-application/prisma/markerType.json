@@ -1,0 +1,29 @@
+[
+    {
+        "markerType" : "Fishing spots",
+        "markerURL": ""
+    },
+
+    {
+        "markerType" : "Establishment of an association",
+        "markerURL": ""
+    },
+
+    {
+        "markerType" : "Shop",
+        "markerURL": ""
+    },
+
+    {
+        "markerType" : "Environmental pollution",
+        "markerURL": ""
+    },
+    {
+        "markerType" : "Water area pollution",
+        "markerURL": ""
+    },
+    {
+        "markerType" : "Danger",
+        "markerURL": ""
+    }
+]
