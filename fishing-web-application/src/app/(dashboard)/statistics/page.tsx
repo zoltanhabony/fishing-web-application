@@ -51,6 +51,7 @@ export default function StatisticsPage() {
 
   if (!session) {
     return (
+      <div className="p-5 h-full">
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
           <h1 className="text-[30px]">Statistics</h1>
@@ -64,11 +65,13 @@ export default function StatisticsPage() {
           </div>
         </CardBody>
       </Card>
+      </div>
     );
   }
 
   if (authorityStat.isLoading || userStat.isLoading || authorities.isLoading) {
     return (
+      <div className="p-5 h-full">
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col">
           <h1 className="text-[30px]">Statistics</h1>
@@ -83,6 +86,7 @@ export default function StatisticsPage() {
           Statistics is loading...
         </CardBody>
       </Card>
+      </div>
     );
   }
 

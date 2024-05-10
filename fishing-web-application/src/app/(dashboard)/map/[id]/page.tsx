@@ -53,7 +53,26 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
   }, [map.data, map.isLoading]);
 
   if (map.isLoading) {
-    return <div>Map data is loading...</div>;
+    return (
+      <div className="p-5 h-full overflow-hidden block">
+      <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
+        <CardHeader className="mobile:block flex flex-col">
+          <h1 className="text-[30px]">View Map</h1>
+        </CardHeader>
+        <CardBody>
+          <div className="space-y-1">
+            <FormSections
+              title={"Find your way around the map"}
+              description={
+                "Use the form and map to create a map of your association. To set up, you need the centre of the lake and the name of the association to which the map belongs"
+              }
+            />
+          </div>
+          <p>Map is loading...</p>
+        </CardBody>
+        </Card>
+        </div>
+    );
   }
 
   return (

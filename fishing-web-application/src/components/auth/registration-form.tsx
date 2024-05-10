@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Button, Input, Link, Select, SelectItem } from "@nextui-org/react";
 import { useState } from "react";
 import * as actions from "@/actions/index";
 import { useFormState } from "react-dom";
@@ -132,6 +132,9 @@ export const RegistrationForm = () => {
           Sign Up
         </Button>
       </form>
+      <div className="w-full flex flex-col justify-center items-center pb-3">
+      <Link href="/auth/login" className="text-sm pt-3 text-white">{"You already have account?"}</Link>
+      </div>
     </AuthCardWrapper>
   );
 };
