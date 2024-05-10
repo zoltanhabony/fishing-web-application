@@ -140,8 +140,6 @@ export async function createMap(
     return f.fisheryAuthority.fisheryAuthorityName === result.data.fisheryAuthorityName
   })
 
-  console.log(!!isMember)
-
   if(!isMember){
     return {
         errors: {
