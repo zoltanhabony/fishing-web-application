@@ -96,6 +96,9 @@ export const LoginForm = () => {
           {formState.errors?.twoFactor ? "Confirm" : "Login"}
         </Button>
       </form>
-      </AuthCardWrapper>
+      <div className="w-full flex flex-col justify-center items-center pb-3">
+      <Link href="/auth/registration" className="text-sm pt-3 text-white">{"You don't have account?"}</Link>
+      </div>
+      </AuthCardWrapper> 
   );
 };

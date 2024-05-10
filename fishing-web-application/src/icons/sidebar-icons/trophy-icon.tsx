@@ -3,8 +3,9 @@ import { SVGProps } from "react";
 export const TrophyIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      fill={props.color}
-      height={props.height}
+      fill="none"
+      width="25"
+      height="25"
       version="1.1"
       id="Layer_1"
       xmlns="http://www.w3.org/2000/svg"
@@ -16,6 +17,7 @@ export const TrophyIcon = (props: SVGProps<SVGSVGElement>) => {
       <g>
         <g>
           <path
+            fill="#969696"
             d="M372.87,445.217H139.13c-18.442,0-33.391,14.949-33.391,33.391v16.696c0,9.22,7.475,16.696,16.696,16.696h267.13
 			c9.22,0,16.696-7.475,16.696-16.696v-16.696C406.261,460.167,391.312,445.217,372.87,445.217z"
           />
@@ -24,6 +26,7 @@ export const TrophyIcon = (props: SVGProps<SVGSVGElement>) => {
       <g>
         <g>
           <path
+            fill="#969696"
             d="M489.739,33.391h-83.478V16.696c0-9.22-7.475-16.696-16.696-16.696h-267.13c-9.22,0-16.696,7.475-16.696,16.696v16.696
 			H22.261c-9.217,0-16.696,7.473-16.696,16.696v66.783c0,64.441,52.424,116.87,116.87,116.87h8.643
 			c17.853,26.664,44.068,47.155,74.835,58.049v53.256c-18.442,0-33.391,14.949-33.391,33.391v33.391h166.957v-33.391

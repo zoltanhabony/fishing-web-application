@@ -4,7 +4,7 @@ import { auth } from "@/auth";
 import { MapCard } from "@/components/card/map-card";
 import { FormSections } from "@/components/form/form-section";
 import { BottomPagination } from "@/components/pagination/bottom-pagination";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Button, Card, CardBody, CardHeader, Link } from "@nextui-org/react";
 
 
 export default async function MapPage({
@@ -62,6 +62,14 @@ export default async function MapPage({
                 "Below are maps of the associations, if they have been created. Not all associations have maps. The maps allow you to find your way around the lake"
               }
             />
+            <br />
+            {session.user.role === "OPERATOR" ?  <Button
+            color="primary"
+            href="/map/new"
+            as={Link}
+          >
+            Create Map
+          </Button>: ""}
           </CardBody>
         </Card>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 mx-auto gap-10 mt-16 px-3 ">
