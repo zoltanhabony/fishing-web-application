@@ -214,3 +214,44 @@ export function useMarkerById(q: string) {
     fetcher
   );
 }
+
+export function useAuthorityStat(q: string, p:string) {
+  return useSWR<any>(
+    `/api/statisticsHandler/getStatisticsByAuthority?authority=${q}&year=${p}`,
+    fetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 404.
+        if (error.status === 404) return;
+        if (error.status === 204) return;
+      },
+    }
+  );
+}
+
+export function useUserStat(q: string) {
+  return useSWR<any>(
+    `/api/statisticsHandler/getStatisticsByUser?year=${q}`,
+    fetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 404.
+        if (error.status === 404) return;
+      },
+    }
+  );
+}
+
+
+export function useOwnAuthorities() {
+  return useSWR<any>(
+    `/api/authorityHandler/getOwnAuthorities`,
+    fetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 404.
+        if (error.status === 404) return;
+      },
+    }
+  );
+}

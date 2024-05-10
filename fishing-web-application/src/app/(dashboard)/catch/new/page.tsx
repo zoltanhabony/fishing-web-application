@@ -40,7 +40,7 @@ export default async function CreateLogbookPage() {
     },
   });
 
-  if (session.user.role !== "USER") {
+  if (session.user.role !== "USER" && session.user.role !== "INSPECTOR") {
     return (
       <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">

@@ -64,7 +64,7 @@ export async function createCatch(
     };
   }
 
-  if (session.user.role !== "USER") {
+  if (session.user.role !== "USER" && session.user.role !== "INSPECTOR") {
     return {
       errors: {
         _form: ["Authorization failed!"],

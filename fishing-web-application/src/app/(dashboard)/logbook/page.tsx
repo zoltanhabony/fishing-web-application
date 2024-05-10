@@ -44,7 +44,7 @@ export default async function LogBookPage({
     );
   }
 
-  if (session.user.role === "OPERATOR" || session?.user.role === "INSPECTOR") {
+  if (session.user.role === "OPERATOR") {
     return (
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
@@ -73,7 +73,7 @@ export default async function LogBookPage({
     isSaved
   );
 
-  if (session.user.role === "USER") {
+  if (session.user.role === "USER" || session.user.role === "INSPECTOR") {
     return (
       <div className="p-5 h-full">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
