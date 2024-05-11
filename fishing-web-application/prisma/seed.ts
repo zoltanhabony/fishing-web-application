@@ -192,7 +192,6 @@ export const seed = async () => {
     })
   })
 
-  /*
 
   
   await db.waterArea.createMany({
@@ -241,7 +240,6 @@ export const seed = async () => {
   await db.unit.createMany({
     data: newUnit,
   });
-  */
 
   await db.markerType.createMany({
     data: newMarkerType,

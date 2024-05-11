@@ -31,7 +31,7 @@ export const MapCard = ({
   const removeMap = deleteMap.bind(null, mapId)
 
   return (
-    <div className="flex gap-4 items-start flex-col bg-zinc-900 p-5 rounded-xl">
+    <div className="flex gap-4 items-start flex-col bg-transparent border-solid border-1 border-default p-5 rounded-xl">
       <div className="w-full flex justify-between items-center">
         <span className="text-violet-600 bg-blue-300/10 p-3 rounded-full">
           <MapIcon />

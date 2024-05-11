@@ -44,7 +44,7 @@ be modified by the association's administrators. This process may
 vary from association to association."
           />
           <br/>
-          {profileData?.member[0].logBook ? <div className="space-y-2">
+          {profileData?.member[0] ? profileData?.member[0].logBook ? <div className="space-y-2">
           <div className="flex items-center space-x-2">
               <p className="text-sm">Logbook ID:</p>
               <p className="text-sm text-primary">{profileData?.member[0].logBook?.id}</p>
@@ -73,7 +73,7 @@ vary from association to association."
                 {profileData.member[0].logBook.expiresDate.toLocaleDateString()}
               </p>
             </div>
-            </div> : <p className="xs">You do not have a catch logbook</p>}
+            </div> : <p className="xs">You do not have a catch logbook</p> : <p className="xs">You do not have a catch logbook</p>}
         </CardBody>
       </Card>
     </div>
