@@ -255,3 +255,16 @@ export function useOwnAuthorities() {
     }
   );
 }
+
+export function usePostById(q: string) {
+  return useSWR<any>(
+    `/api/postHandler/getPostById?id=${q}`,
+    fetcher,
+    {
+      onErrorRetry: (error) => {
+        // Never retry on 404.
+        if (error.status === 404) return;
+      },
+    }
+  );
+}

@@ -21,4 +21,6 @@ export { editMap } from "./db-actions/map-actions/edit-map"
 export { editMarker } from "./db-actions/map-actions/edit-marker"
 export { deleteMap } from "./db-actions/map-actions/delete-map"
 export { deleteMarker } from "./db-actions/map-actions/delete-marker"
-
+export { createPost } from "./db-actions/post-actions/create-post"
+export { editPost } from "./db-actions/post-actions/edit-post"
+export { deletePost } from "./db-actions/post-actions/delete-post"

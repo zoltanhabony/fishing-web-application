@@ -77,7 +77,7 @@ export default async function MapPage({
         </div>
         <br />
         <div className="w-full flex items-center justify-center">
-        <BottomPagination pages={pages}/>
+        {pages !== 0 ? <BottomPagination pages={pages}/> : <p>No map found</p> }
         </div>
       </div>
     );

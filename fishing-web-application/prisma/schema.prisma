@@ -99,6 +99,7 @@ model Member {
   logBook          Logbook?         @relation(fields: [logbookId], references: [id], onDelete: Cascade)
   Map              Map[]
   Marker           Marker[]
+  post             Post[]
 }
 
 model Logbook {
@@ -121,6 +122,7 @@ model FisheryAuthority {
   waterArea WaterArea @relation(fields: [waterAreaId], references: [id])
   address   Address   @relation(fields: [addressId], references: [id], onDelete: Cascade)
   Map       Map?
+  post      Post[]
 }
 
 model Catch {
@@ -250,10 +252,23 @@ model Marker {
 }
 
 model MarkerType {
-  id     String   @id @default(cuid())
-  type   String
+  id        String   @id @default(cuid())
+  type      String
   markerURL String
-  marker Marker[]
+  marker    Marker[]
+}
+
+//Post
+model Post {
+  id                 String @id @default(cuid())
+  mainTitle          String
+  summary            String
+  content            String
+  memberId           String
+  fisheryAuthorityId String
+
+  member           Member           @relation(fields: [memberId], references: [id])
+  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
 }
 
 //Tokens
