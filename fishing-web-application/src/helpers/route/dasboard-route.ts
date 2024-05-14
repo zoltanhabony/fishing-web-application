@@ -7,6 +7,7 @@ import { HomeIcon } from "@/icons/sidebar-icons/home-icon"
 import { MapIcon } from "@/icons/sidebar-icons/map-icon"
 import { NewspaperIcon } from "@/icons/sidebar-icons/newspaper-icon"
 import { StatisticsIcon } from "@/icons/sidebar-icons/statistics-icon"
+import { TrophyIcon } from "@/icons/sidebar-icons/trophy-icon"
 import { UserRole} from "@prisma/client"
 
 type RouteType = {
@@ -53,7 +54,7 @@ const catches : RouteType = {
     icon: FishIcon,
     role:  ["OPERATOR", "INSPECTOR"],
     access: {
-        accessToLogbook: true
+        accessToAuthority: true
     }
 }
 
@@ -63,7 +64,7 @@ const member : RouteType = {
     icon: MembersIcon,
     role:  ["OPERATOR", "INSPECTOR"],
     access: {
-        accessToLogbook: true
+        accessToAuthority: true
     }
 }
 
@@ -91,11 +92,19 @@ const post : RouteType = {
     access:{}
 }
 
+const tournament : RouteType = {
+    href: "/tournament",
+    title: "Tournament",
+    icon: TrophyIcon,
+    role:  ["OPERATOR", "INSPECTOR", "USER"],
+    access:{}
+}
+
 
 export const defaultRoutes: RouteType[] = [
     dashboard,
 ]
 
 export const mainMenuRoutes: RouteType[] = [
-    logBook, authority, catches, member, map, statistics, post
+    logBook, authority, catches, member, map, statistics, post,tournament
 ]

@@ -25,7 +25,7 @@ export const FishAvatar = ({
     <Card className=" text-gray-500 flex items-center justify-center ">
       <CardBody>
         <div className="flex justify-center items-center">
-          <img src={fishImageUrl} alt={fishName} />
+          <img src={fishImageUrl} alt={fishName}/>
         </div>
       </CardBody>
     </Card>

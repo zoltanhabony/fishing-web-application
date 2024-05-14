@@ -1,14 +1,17 @@
 import Image from "next/image";
 
-export const AppLogo = () => {
+
+interface AppLogoProps {
+  sizes?: string
+}
+export const AppLogo = ({sizes}: AppLogoProps) => {
   return (
     <Image
-      className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert w-[60px]"
-      src="/vercel.svg"
+      className="relative "
+      src="/app-logo.png"
       alt="Next.js Logo"
-      width="0"
-      height="0"
-      sizes="100vw"
+      width="32"
+      height="32"
       priority
     />
   );
