@@ -113,14 +113,28 @@ export async function  credentialRegistration(
       },
     });
 
-    await db.access.create({
-      data:{
-        userId: user.id,
-        accessToLogbook: false,
-        accessToAuthority: false,
-        accessToFishing: false
-      }
-    })
+    if(user.role === "USER") {
+      await db.access.create({
+        data:{
+          userId: user.id,
+          accessToLogbook: false,
+          accessToAuthority: false,
+          accessToFishing: false
+        }
+      })
+    }
+
+    
+    if(user.role === "OPERATOR") {
+      await db.access.create({
+        data:{
+          userId: user.id,
+          accessToLogbook: false,
+          accessToAuthority: true,
+          accessToFishing: false
+        }
+      })
+    }
   } catch (error) {
     return generalError(error);
   }

@@ -27,7 +27,7 @@ export const SidebarWrapper = ({ currentAccess }: SidebarWrapperProps) => {
         })}
       >
         <div className={Sidebar.Header()}>
-          <ApplicationInfo />
+          <ApplicationInfo/>
         </div>
 
         <div className="flex flex-col justify-between h-full">

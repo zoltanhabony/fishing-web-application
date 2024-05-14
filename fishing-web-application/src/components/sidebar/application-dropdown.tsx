@@ -1,23 +1,22 @@
 import React, { useState } from "react";
+import { AppLogo } from "../brand/app-logo";
 
 interface Company {
   name: string;
   location: string;
-  logo: React.ReactNode;
 }
 
 export const ApplicationInfo = () => {
   const [contact, setContact] = useState<Company>({
     name: "FISHIFY",
     location: "Palo Alto, CA",
-    logo: null,
   });
 
   return (
-        <div className="flex items-center gap-2">
-          {contact.logo}
-          <div className="flex flex-col gap-4">
-            <h3 className="text-xl font-medium m-0 text-default-900 -mb-4 whitespace-nowrap">
+        <div className="flex items-center w-full">
+          <AppLogo/>
+          <div className="flex flex-col gap-4 mt-[-12px] pl-3">
+            <h3 className="text-md font-medium m-0 text-default-900 -mb-4 whitespace-nowrap">
               FISHIFY
             </h3>
           </div>

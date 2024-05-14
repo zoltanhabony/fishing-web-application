@@ -1,10 +1,11 @@
 "use client";
 
-import { deletePost } from "@/actions";
+import { deleteMap, deleteTournament } from "@/actions";
 import { DeleteIcon } from "@/icons/delete-icon";
 import { EditIcon } from "@/icons/edit-icon";
+import { MapIcon } from "@/icons/sidebar-icons/map-icon";
+import { TrophyIcon } from "@/icons/sidebar-icons/trophy-icon";
 import {
-  Avatar,
   Button,
   Modal,
   ModalBody,
@@ -14,57 +15,40 @@ import {
   useDisclosure,
 } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { StringToBoolean } from "tailwind-variants";
 
-interface PostCardProps {
-  mainTitle: string;
-  summary: string;
+interface MapProps {
+  isFinished: boolean
+  tournamentId: string;
   authorityName: string;
+  tournamentName: string;
+  tournamentDescription: string;
+  tournamentType: string;
   isAuthor: Boolean;
-  postId: string;
-  imageURL: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  name: string | null;
+  numberOfParticipants: number;
 }
 
-export const PostCard = ({
-  mainTitle,
-  summary,
+export const TournamentCard = ({
   authorityName,
+  tournamentId,
+  tournamentName,
+  tournamentDescription,
+  tournamentType,
   isAuthor,
-  postId,
-  imageURL,
-  firstName,
-  lastName,
-  email,
-  name,
-}: PostCardProps) => {
+  isFinished
+}: MapProps) => {
   const router = useRouter();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const removePost = deletePost.bind(null, postId);
+  const removeTournament = deleteTournament.bind(null, tournamentId);
 
   return (
-    <div className="flex gap-4 items-start flex-col justify-between border-solid border-1 border-default p-5 rounded-xl">
+    <div className="flex gap-4 items-start flex-col justify-between bg-transparent border-solid border-1 border-default p-5 rounded-xl">
       <div>
-      <div className="w-full block sm:flex justify-between items-center">
-        <div className="flex gap-3">
-          <Avatar
-            isBordered
-            radius="full"
-            size="md"
-            src={imageURL ? imageURL : ""}
-          />
-          <div className="flex flex-col gap-1 items-start justify-center">
-            <h4 className="text-small font-semibold leading-none text-default-600">
-              {firstName && lastName ? `${firstName} ${lastName}` : name}
-            </h4>
-            <h5 className="text-small tracking-tight text-default-400">
-              {firstName && lastName ? name : email}
-            </h5>
-          </div>
-        </div>
+      <div className="w-full flex justify-between items-center">
+        <span className="text-violet-600 bg-blue-300/10 p-3 rounded-full">
+          <TrophyIcon />
+        </span>
         {isAuthor ? (
           <div className="flex ">
             <Button
@@ -73,31 +57,35 @@ export const PostCard = ({
               size="lg"
               color="primary"
               aria-label="Like"
-              onClick={() => router.push(`/post/${postId}/edit`)}
+              onClick={() => router.push(`/tournament/${tournamentId}/edit`)}
             >
               <EditIcon />
             </Button>
-            <Button
+            {isFinished ? <Button
               isIconOnly
               variant="light"
               size="lg"
               color="danger"
               aria-label="Like"
+              type="submit"
               onPress={onOpen}
             >
               <DeleteIcon />
-            </Button>
+            </Button>: ""}
           </div>
         ) : null}
       </div>
-
-      <div className="space-y-3 pt-5">
-        <p className="text-xs text-default">{authorityName + "'s post"}</p>
-        <h3 className="font-semibold text-lg">{mainTitle}</h3>
-        <p className="text-sm mt-1 text-gray-300 ">
-          {summary.length > 250 ? summary.substring(0, 250) + "..." : summary}
-        </p>
-        <div></div>
+      <div className="space-y-3">
+        <p className="text-xs mt-2 text-gray-500">{authorityName}</p>
+        <h3 className="font-semibold text-lg">{tournamentName}</h3>
+        <div>
+          <p className="text-sm">
+            { tournamentDescription.length > 250 ? tournamentDescription.substring(0,250) + "..." : tournamentDescription.substring(0,250)}
+          </p>
+        </div>
+        <p className="text-sm text-gray-500">
+            {"Tournament type: " + tournamentType}
+          </p>
       </div>
       </div>
       <div className="flex w-full justify-end">
@@ -106,21 +94,21 @@ export const PostCard = ({
           size="md"
           color="primary"
           aria-label="Like"
-          onClick={() => router.push(`/post/${postId}`)}
+          onClick={() => router.push(`/tournament/${tournamentId}`)}
         >
-          View post
+          View tournament
         </Button>
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="z-100">
+        {isFinished ? <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="z-100">
           <ModalContent>
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  <p className="text-md">{"Delete Post"}</p>
+                  <p className="text-md">{"Delete marker"}</p>
                 </ModalHeader>
                 <ModalBody>
                   <p>
                     {
-                      "The operation is final and cannot be revoked! Deleting the post will remove all data."
+                      "The operation is final and cannot be revoked! Deleting the marker will remove all data marked by the marker."
                     }
                   </p>
                   <br />
@@ -130,10 +118,10 @@ export const PostCard = ({
                   <Button color="default" onPress={onClose}>
                     Close
                   </Button>
-                  <form action={removePost}>
+                  <form action={removeTournament}>
                     <Button
                       color="danger"
-                      aria-label="Delete post"
+                      aria-label="Delete marker"
                       type="submit"
                       onPress={onClose}
                     >
@@ -144,7 +132,7 @@ export const PostCard = ({
               </>
             )}
           </ModalContent>
-        </Modal>
+        </Modal>: ""}
       </div>
     </div>
   );

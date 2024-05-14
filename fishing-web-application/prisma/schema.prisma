@@ -100,6 +100,8 @@ model Member {
   Map              Map[]
   Marker           Marker[]
   post             Post[]
+  participant      Participant[]
+  tournament       Tournament[]
 }
 
 model Logbook {
@@ -118,11 +120,12 @@ model FisheryAuthority {
   waterAreaId          String
   addressId            String @unique
 
-  member    Member[]
-  waterArea WaterArea @relation(fields: [waterAreaId], references: [id])
-  address   Address   @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  Map       Map?
-  post      Post[]
+  member     Member[]
+  waterArea  WaterArea    @relation(fields: [waterAreaId], references: [id])
+  address    Address      @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  Map        Map?
+  post       Post[]
+  tournament Tournament[]
 }
 
 model Catch {
@@ -206,6 +209,7 @@ model Fish {
 
   waterAreaRule WaterAreaRule[]
   Catch         Catch[]
+  Tournament    Tournament[]
 }
 
 model Constraint {
@@ -269,6 +273,38 @@ model Post {
 
   member           Member           @relation(fields: [memberId], references: [id])
   fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
+}
+
+//Tournament
+model Tournament {
+  id                    String   @id @default(cuid())
+  tournamentName        String
+  tournamentDescription String
+  deadline              DateTime
+  startDate             DateTime
+  isFinished            Boolean  @default(false)
+  maxParticipants       Int
+  tournamentType        String?
+  fishId                String?
+  memberId              String
+  fisheryAuthorityId    String
+
+  fish             Fish?            @relation(fields: [fishId], references: [id])
+  member           Member           @relation(fields: [memberId], references: [id])
+  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
+  participant      Participant[]
+}
+
+model Participant {
+  id           String @id @default(cuid())
+  tournamentId String
+  memberId     String
+  rank         Int?
+
+  member     Member     @relation(fields: [memberId], references: [id])
+  tournament Tournament @relation(fields: [tournamentId], references: [id])
+
+  @@unique([memberId, tournamentId])
 }
 
 //Tokens
