@@ -116,6 +116,26 @@ export async function applyForTournament(
     };
   }
 
+  const participants = await db.participant.aggregate({
+    where: {
+      tournamentId: tournament.id
+    },
+    _count: {
+      id: true
+    }
+  })
+
+  if(tournament.maxParticipants < participants._count.id + 1){
+    return {
+      errors: {
+        _form: ["Unsuccessful application!"],
+        subtitle: "No place available",
+        status: "warning",
+        description: "You cannot enter the competition, places are full!",
+      },
+    };
+  }
+
   try {
 
     await db.participant.create({

@@ -9,7 +9,7 @@ import {
 import { useFormState } from "react-dom";
 import * as actions from "@/actions/index";
 import { useState } from "react";
-import { useAuthorities, useCities, useUsers, useWaterAreas } from "@/services/queries";
+import { useAuthorities, useAuthoritiesForLogbook, useCities, useUsersForLogbook, useWaterAreas } from "@/services/queries";
 import { useDebounce } from "use-debounce";
 import { InformationCard } from "../information-card";
 
@@ -30,8 +30,8 @@ export const CreateLogbookForm = () => {
   const [authorityName] = useDebounce<string>(authority, 1500);
   const [userName] = useDebounce<string>(user, 1500);
   
-  const authorities = useAuthorities(authorityName);
-  const users = useUsers(userName);
+  const authorities = useAuthoritiesForLogbook(authorityName);
+  const users = useUsersForLogbook(userName);
 
   const [formState, action] = useFormState(actions.createLogbook, {
     errors: {},

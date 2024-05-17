@@ -8,10 +8,11 @@ import { revalidatePath } from "next/cache";
 
 interface SettingsFormState {
   errors: {
-    userId?: string[];
-    accessToAuthority?: string[],
-    accessToLogbook?: string[],
-    accessToFishing?:string[],
+    memberId?: string[];
+    accessToLogbook?: string[];
+    accessToFishing?: string[];
+    accessToTournament?: string[];
+    accessToMarker?: string[];
     _form?: string[];
     subtitle?: string;
     status?: string;
@@ -19,20 +20,19 @@ interface SettingsFormState {
   };
 }
 
-export const updateMemberPermissions = async (
+export const updateUserPermissions = async (
   formSate: SettingsFormState,
   formData: FormData
 ): Promise<SettingsFormState> => {
   const data = {
-    userId: formData.get("userId"),
-    accessToAuthority: Boolean(formData.get("accessToAuthority")),
+    memberId: formData.get("memberId"),
     accessToLogbook: Boolean(formData.get("accessToLogbook")),
     accessToFishing: Boolean(formData.get("accessToFishing")),
+    accessToMarker:Boolean(formData.get("accessToMarker")),
+    accessToTournament: Boolean(formData.get("accessToTournament")),
   };
 
-  const session = await auth()
-
-
+  const session = await auth();
 
   if (!session) {
     return {
@@ -45,7 +45,20 @@ export const updateMemberPermissions = async (
     };
   }
 
-  if (session.user.role as UserRole !== UserRole.OPERATOR && session.user.role as UserRole !== UserRole.INSPECTOR) {
+  const currentUser = await db.user.findUnique({where:{
+    email: session.user.email
+  }, select: {
+    access:{
+        select:{
+            accessToAuthority:true
+        }
+    }
+  }})
+
+  if (
+    (session.user.role as UserRole) !== UserRole.OPERATOR &&
+    ((session.user.role as UserRole) !== UserRole.INSPECTOR && currentUser?.access[0].accessToAuthority)
+  ) {
     return {
       errors: {
         _form: ["Authorization failed!"],
@@ -55,30 +68,26 @@ export const updateMemberPermissions = async (
       },
     };
   }
+  
 
-  const result = schemas.memberPermissonSchema.safeParse(data);
-
+  const result = schemas.userPermissonSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error.flatten().fieldErrors)
+    console.log(result.error.flatten().fieldErrors);
     return {
       errors: result.error.flatten().fieldErrors,
     };
   }
 
-  console.log(data)
+  console.log("ez az ertek: " + result.data.accessToLogbook);
 
-  const user = await db.user.findUnique({ where: { id: result.data.userId }, include: {
-    access: {
-      select: {
-        accessToAuthority:true,
-        accessToFishing:true,
-        accessToLogbook:true,
-      },
-    },
-  },});
+  const member = await db.member.findUnique({
+    where: { id: result.data.memberId },
+  });
 
-  if (!user) {
+  
+
+  if (!member) {
     return {
       errors: {
         _form: ["Failed data modification!"],
@@ -89,22 +98,22 @@ export const updateMemberPermissions = async (
     };
   }
 
-  //console.log(result.data)
-
   try {
-
-    await db.access.update({
-        where: {
-            userId: result.data.userId
-        },
-        data:{
-            accessToAuthority: result.data.accessToAuthority,
-            accessToLogbook: result.data.accessToLogbook,
-            accessToFishing: result.data.accessToFishing
-        }
-    })
     
-    revalidatePath("/member/[id]/edit")
+    await db.access.update({
+      where: {
+        userId: member.userId
+      },
+      data: {
+        accessToLogbook: result.data.accessToLogbook,
+        accessToFishing: result.data.accessToFishing,
+        accessToMarker: result.data.accessToMarker,
+        accessToTournament: result.data.accessToTournament
+      },
+    });
+
+    revalidatePath("/member/[id]/edit");
+    
     return {
       errors: {
         _form: ["Settings updated!"],
@@ -120,7 +129,7 @@ export const updateMemberPermissions = async (
         _form: ["Failed data modification!"],
         subtitle: "Failure to save the data!",
         status: "error",
-        description: String(error)
+        description: String(error),
       },
     };
   }

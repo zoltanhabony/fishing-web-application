@@ -8,6 +8,7 @@ import {
 import { UpdateProfileForm } from "@/components/auth/update-profile-form";
 import { FormSections } from "@/components/form/form-section";
 import { getProfileData } from "@/actions/db-actions/profile-data";
+import { UserAvatar } from "@/components/card/user-card";
 
 export default async function ProfilePage() {
 
@@ -20,23 +21,25 @@ export default async function ProfilePage() {
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
           <h1 className="text-[30px] pb-5">Profile settings</h1>
-          <Avatar
-            isBordered
-            color="default"
-            src={profileData?.image ? profileData.image : ""}
-            className="h-[100px] w-[100px]"
-          />
-        </CardHeader>
-        <CardBody>
           <div className="space-y-1">
             <FormSections
               title="Personal information"
               description="The following fields contain the information for the user account.
               To edit the data, click on the edit profile button."
             />
+            <br />
           </div>
+          <UserAvatar
+              image={profileData?.image ? profileData.image : ""}
+              username={profileData?.name ? profileData.name : ""}
+              email={profileData?.email ? profileData.email : ""}
+              firstName={profileData?.firstName ? profileData.firstName : ""}
+              lastName={profileData?.lastName ? profileData.lastName : ""}
+            />
+        </CardHeader>
+        <CardBody className="space-y-3">
           <UpdateProfileForm profileData={profileData}/>
-          <br />
+          
           <FormSections
             title="Logbook information"
             description="The following fields contain the catch logbook data. The data can only
@@ -73,7 +76,7 @@ vary from association to association."
                 {profileData.member[0].logBook.expiresDate.toLocaleDateString()}
               </p>
             </div>
-            </div> : <p className="xs">You do not have a catch logbook</p> : <p className="xs">You do not have a catch logbook</p>}
+            </div> : <p className="text-sm text-primary">You do not have a catch logbook</p> : <p className="text-sm text-primary">You do not have a catch logbook</p>}
         </CardBody>
       </Card>
     </div>

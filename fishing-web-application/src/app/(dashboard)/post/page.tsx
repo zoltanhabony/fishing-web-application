@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { PostCard } from "@/components/card/post-card";
 import { FormSections } from "@/components/form/form-section";
 import { BottomPagination } from "@/components/pagination/bottom-pagination";
+import db from "@/lib/db";
 import { Button, Card, CardBody, CardHeader, Link } from "@nextui-org/react";
 
 export default async function PostPage({
@@ -20,6 +21,14 @@ export default async function PostPage({
   const search = searchParams?.search || "";
 
   const postList = await getAllPost(page, search);
+
+  const access = await db.access.findFirst({
+    where: {
+      user:{
+        email: session?.user.email
+      }
+    }
+  })
 
   const pages = Math.ceil(postList.numberOfPost / 12);
 
@@ -76,7 +85,7 @@ export default async function PostPage({
             }
           />
           <br />
-          {session.user.role === "OPERATOR" ? (
+          {session.user.role === "OPERATOR" || (session.user.role === "INSPECTOR" && access?.accessToPost) ? (
             <Button color="primary" href="/post/new" as={Link}>
               Create Post
             </Button>

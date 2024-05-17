@@ -10,7 +10,6 @@ datasource db {
 
 //Enums
 enum UserRole {
-  ADMIN
   OPERATOR
   INSPECTOR
   USER
@@ -72,9 +71,14 @@ model Account {
 model Access {
   id                String  @id @default(cuid())
   userId            String  @unique
-  accessToLogbook   Boolean
-  accessToAuthority Boolean
-  accessToFishing   Boolean
+  accessToLogbook   Boolean @default(false)
+  accessToAuthority Boolean @default(false)
+  accessToFishing   Boolean @default(false)
+  accessToPost Boolean @default(false)
+  accessToMarker Boolean @default(false)
+  accessToTournament Boolean @default(false)
+  accessToCatches Boolean @default(false)
+  accessToInspect Boolean @default(false)
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 

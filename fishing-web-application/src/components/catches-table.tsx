@@ -95,7 +95,7 @@ export default function CatchesTable({
       router={router}
       searchParams={searchParams}
       pathname={pathname}
-      emptyContent="No members found"
+      emptyContent="No catches found"
     />
   );
 }

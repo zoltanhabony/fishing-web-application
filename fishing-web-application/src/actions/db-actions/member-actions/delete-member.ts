@@ -1,5 +1,6 @@
 "use server"
 import db from "@/lib/db";
+import { UserRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
 export async function deleteMember(id: string) {
@@ -7,7 +8,7 @@ export async function deleteMember(id: string) {
     
     const member = await db.member.findFirst({
         where:{
-            userId: id
+            id:id
         }
     })
 
@@ -51,6 +52,14 @@ export async function deleteMember(id: string) {
         await db.logbook.delete({
             where:{
                 id: member.logbookId
+            }
+        })
+
+        await db.user.update({
+            where:{
+                id: member.userId
+            },data:{
+                role: UserRole.USER
             }
         })
 

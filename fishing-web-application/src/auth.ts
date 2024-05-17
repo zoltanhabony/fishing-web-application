@@ -126,6 +126,8 @@ export const {
       return token;
     },
   },
+  secret: process.env.AUTH_SECRET,
+  trustHost:true,
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   ...authConfig,

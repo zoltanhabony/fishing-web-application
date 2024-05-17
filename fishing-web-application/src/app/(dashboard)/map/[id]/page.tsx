@@ -11,7 +11,7 @@ import {
 import { useEffect, useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
-import { useMapById, useMarkersByMap } from "@/services/queries";
+import { useMapById, useMarkersByMap, useUserAccess } from "@/services/queries";
 import { useRouter } from "next/navigation";
 
 interface MarkerCreatePageProps {
@@ -23,6 +23,7 @@ interface MarkerCreatePageProps {
 export default function ViewMapPage(props: MarkerCreatePageProps) {
   const map = useMapById(props.params.id);
   const markers = useMarkersByMap(props.params.id);
+  const access = useUserAccess()
 
   const revalidateMarker = () => {
     markers.mutate();
@@ -52,7 +53,7 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
     }
   }, [map.data, map.isLoading]);
 
-  if (map.isLoading) {
+  if (map.isLoading || markers.isLoading || access.isLoading) {
     return (
       <div className="p-5 h-full overflow-hidden block">
       <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
@@ -96,12 +97,12 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
             />
           </div>
           <br />
-          <Button
+          {access.data?.access ? (access.data.access.accessToMarker ? <Button
             color="primary"
             onClick={() => router.push(`/map/${props.params.id}/marker/new`)}
           >
             Create Marker
-          </Button>
+          </Button> : ""): ""}
         </CardBody>
       </Card>
       <Map

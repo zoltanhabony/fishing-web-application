@@ -119,7 +119,12 @@ export async function  credentialRegistration(
           userId: user.id,
           accessToLogbook: false,
           accessToAuthority: false,
-          accessToFishing: false
+          accessToFishing: false,
+          accessToCatches:false,
+          accessToInspect:false,
+          accessToTournament:true,
+          accessToMarker:true,
+          accessToPost: false,
         }
       })
     }
@@ -131,7 +136,12 @@ export async function  credentialRegistration(
           userId: user.id,
           accessToLogbook: false,
           accessToAuthority: true,
-          accessToFishing: false
+          accessToFishing: true,
+          accessToCatches:true,
+          accessToInspect:true,
+          accessToMarker:true,
+          accessToPost: true,
+          accessToTournament:true
         }
       })
     }

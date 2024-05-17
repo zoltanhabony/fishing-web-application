@@ -8,9 +8,7 @@ import {
   publicRoutes,
 } from "./route";
 
-
 const { auth } = NextAuth(authConfig);
-
 
 export const middleware = auth((req) => {
   const { nextUrl } = req;

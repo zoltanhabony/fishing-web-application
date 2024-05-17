@@ -104,7 +104,7 @@ export default function ViewPostPage(props: ViewPostProps) {
         </Card>
         <br />
         <div className="w-full lg:w-[1000px] px-3">
-        <MDEditor.Markdown source={post.data.post.content} style={{ whiteSpace: 'pre-wrap' }} className="bg-transparent"/>
+        <MDEditor.Markdown source={post.data.post.content} style={{ whiteSpace: 'pre-wrap', color:"white"}} className="bg-transparent"/>
         </div>
       </div>
     );

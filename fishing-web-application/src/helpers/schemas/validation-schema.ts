@@ -50,7 +50,7 @@ export const settingsSchema = z.object({
 })
 
 export const memberSchema = z.object({
-  userId:z.string().min(1, {message:"The user id is required"}),
+  memberId:z.string().min(1, {message:"The member id is required"}),
   email: z
       .string()
       .min(1,{
@@ -62,10 +62,23 @@ export const memberSchema = z.object({
   role: z.optional(z.string().min(1, {message:"The role is required"}).min(3, {message:"The role must be USER or INSPECTOR"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'The role should contain only alphabets'))
 })
 
-export const memberPermissonSchema = z.object({
-  userId:z.string().min(1, {message:"The user id is required"}),
-  accessToAuthority: z.boolean(),
+export const userPermissonSchema = z.object({
+  memberId:z.string().min(1, {message:"The member id is required"}),
   accessToFishing: z.boolean(),
   accessToLogbook: z.boolean(),
+  accessToMarker: z.boolean(),
+  accessToTournament: z.boolean(),
+})
+
+export const inspectorPermissonSchema = z.object({
+  memberId:z.string().min(1, {message:"The member id is required"}),
+  accessToFishing: z.boolean(),
+  accessToLogbook: z.boolean(),
+  accessToAuthority: z.boolean(),
+  accessToCatch: z.boolean(),
+  accessToTournament: z.boolean(),
+  accessToPost: z.boolean(),
+  accessToMarker: z.boolean(),
+  accessToInspect: z.boolean(),
 })
 

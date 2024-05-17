@@ -2,15 +2,14 @@ import { NextRequest, NextResponse } from "next/server"
 import db from "@/lib/db"
 import { auth } from "@/auth"
 
-type authority = {
+type user = {
     id: string,
-    fisheryAuthorityName:  string,
+    name:  string | null,
 }
 
 export async function GET(request: NextRequest) {
 
         const session = await auth()
-
         const access = await db.access.findFirst({
             where: {
                 user:{
@@ -18,37 +17,42 @@ export async function GET(request: NextRequest) {
                 }
             }
         })
-
         if(session){
-
             if(session.user.role === "OPERATOR" || (session.user.role === "INSPECTOR" && access?.accessToAuthority)){
 
                 const name =  request.nextUrl.searchParams.get("name")
 
-                let authority: authority[] = []
+                let user: user[] = []
 
                 if(name === "" || name === null){
                     return NextResponse.json(
-                        { authorities: authority, message: "The data has been successfully retrieved!"},
+                        { users: user, message: "The data has been successfully retrieved!"},
                         { status: 200 })
                 }
 
-                authority = await db.fisheryAuthority.findMany({
+                user = await db.user.findMany({
                     where:{
-                        fisheryAuthorityName: {
+                        name: {
                             contains: name,
                             mode: 'insensitive'
+                        },
+                        role: {
+                            not: "OPERATOR"
+                        },
+                        member:{
+                            none: {
+                                id: undefined
+                            }
                         }
                     },
                     select: {
                         id: true,
-                        fisheryAuthorityName:true,
+                        name:true,
                     }
                 })
-                
 
                 return NextResponse.json(
-                    { authorities: authority, message: "The data has been successfully retrieved!" },
+                    { users: user, message: "The data has been successfully retrieved!" },
                     { status: 200 }
                 )
             }

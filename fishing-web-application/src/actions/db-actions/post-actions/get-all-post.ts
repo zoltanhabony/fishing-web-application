@@ -44,20 +44,40 @@ export async function getAllPost(
 
   try {
 
+    const access = await db.access.findFirst({
+      where: {
+        user:{
+          email: session?.user.email
+        }
+      }
+    })
+
     const xdb = await db.$extends({
       result: {
         post:{
           isAuthor:{
               needs: { memberId:true, fisheryAuthorityId:true},
               async compute (post){
-                  
+              
+              const isOperator = await db.member.findFirst({
+                where:{
+                  user:{
+                    email: session?.user.email,
+                    role: "OPERATOR"
+                  },
+                  fisheryAuthorityId: post.fisheryAuthorityId
+                }
+              })
+
               const currentMember = await db.post.findFirst({
                     where:{ fisheryAuthorityId: post.fisheryAuthorityId, member:{user: {
-                      role: UserRole.OPERATOR,
+                      OR:[{
+                        role: "OPERATOR"
+                      },{role: "INSPECTOR"}],
                       email: session?.user.email
                     }}}
                 })
-                return post.memberId === currentMember?.memberId
+                return (post.memberId === currentMember?.memberId || Boolean(isOperator)) && Boolean(access?.accessToPost)
               }
           }
         }

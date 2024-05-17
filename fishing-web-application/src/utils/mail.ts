@@ -29,7 +29,7 @@ export const sendTwoFactorTokenEmail = async ( email: string, token: string) => 
 }
 
 export const sendPasswordResetEmail = async (email: string, token: string) => {
-    const resetLink = `http://localhost:3000/auth/reset-password?token=${token}`;
+    const resetLink = `${process.env.NEXT_PUBLIC_API_URL}/auth/reset-password?token=${token}`;
     
     const emailData = {
         Messages: [
@@ -58,7 +58,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
 
 export const sendVerificationEmail = async (email: string, token: string) => {
-    const confirmLink = `http://localhost:3000/auth/email-verification?token=${token}`;
+    const confirmLink = `${process.env.NEXT_PUBLIC_API_URL}/auth/email-verification?token=${token}`;
     const emailData = {
         Messages: [
           {

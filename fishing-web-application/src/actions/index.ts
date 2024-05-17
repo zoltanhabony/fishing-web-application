@@ -14,7 +14,7 @@ export { editMemberCatch } from "./db-actions/catch-actions/edit-member-catch";
 export { editCatch } from "./db-actions/catch-actions/edit-catch";
 export { createFishingDate } from "./db-actions/fishing-date-action/create-fishing-date";
 export { updateMemberDetails } from "./db-actions/member-actions/edit-member-details";
-export { updateMemberPermissions } from "./db-actions/member-actions/modify-member-permissons";
+export { updateUserPermissions } from "./db-actions/member-actions/modify-user-permissons";
 export { createMap } from "./db-actions/map-actions/create-map"
 export { createMarker } from "./db-actions/map-actions/create-marker"
 export { editMap } from "./db-actions/map-actions/edit-map"
@@ -31,3 +31,4 @@ export {deregisterFromTournament} from"./db-actions/tournament-actions/deregiste
 export {changeRank} from "./db-actions/tournament-actions/change-rank"
 export {deleteParticipant} from "./db-actions/tournament-actions/delete-participant"
 export {deleteTournament} from "./db-actions/tournament-actions/delete-tournament"
+export { updateInspectorPermissions } from "./db-actions/member-actions/modify-inspector-permissions";

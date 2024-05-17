@@ -29,6 +29,14 @@ export default async function CreateLogbookPage() {
     );
   }
 
+  const access = await db.access.findFirst({
+    where: {
+      user: {
+        email: session.user.email,
+      },
+    },
+  });
+
   const isFishing = await db.isFishing.findFirst({
     where: {
       user: {
@@ -40,30 +48,33 @@ export default async function CreateLogbookPage() {
     },
   });
 
-  if (session.user.role !== "USER" && session.user.role !== "INSPECTOR") {
+  console.log(!access?.accessToFishing)
+  console.log(!access?.accessToLogbook)
+
+  if(!access?.accessToFishing || !access?.accessToLogbook){
     return (
-      <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
-        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
-          <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-            <h1 className="text-[30px]">Add New Catch</h1>
-          </CardHeader>
-          <CardBody>
-            <div className="space-y-1">
-              <FormSections
-                title={"The operation is not allowed!"}
-                description={
-                  "Operators and inspectors are not allowed to record catches!"
-                }
-              />
-            </div>
-          </CardBody>
-        </Card>
-      </div>
+      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
+        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+          <h1 className="text-[30px]">Logbook</h1>
+        </CardHeader>
+        <CardBody>
+          <div className="space-y-1">
+            <FormSections
+              title={"You have no logbook or permisson to create catch!"}
+              description={
+                "No catch logbook or permission! This function is only available to users who are members, have a catch logbook and permission"
+              }
+            />
+          </div>
+        </CardBody>
+      </Card>
     );
   }
 
-
-  if (!isFishing?.date || isFishing?.date.toLocaleDateString() !== new Date().toLocaleDateString()) {
+  if (
+    !isFishing?.date ||
+    isFishing?.date.toLocaleDateString() !== new Date().toLocaleDateString()
+  ) {
     return (
       <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
@@ -76,7 +87,31 @@ export default async function CreateLogbookPage() {
                 title="Start fishing"
                 description="Start fishing and save catched fish!"
               />
-              <CreateFishingDateForm/>
+              <CreateFishingDateForm />
+            </div>
+          </CardBody>
+        </Card>
+      </div>
+    );
+  }
+
+  if (
+    session.user.role === "USER" ||
+    session.user.role === "INSPECTOR"
+  ) {
+    return (
+      <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
+        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
+          <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+            <h1 className="text-[30px]">Add New Catch</h1>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-1">
+              <FormSections
+                title="New Catch"
+                description="The following fields are required. These data will be necessary to identify the catches and build the logbook"
+              />
+              <CreateCatchForm />
             </div>
           </CardBody>
         </Card>
@@ -93,13 +128,15 @@ export default async function CreateLogbookPage() {
         <CardBody>
           <div className="space-y-1">
             <FormSections
-              title="New Catch"
-              description="The following fields are required. These data will be necessary to identify the catches and build the logbook"
+              title={"The operation is not allowed!"}
+              description={
+                "Operators and inspectors are not allowed to record catches!"
+              }
             />
-            <CreateCatchForm />
           </div>
         </CardBody>
       </Card>
     </div>
   );
+
 }

@@ -12,19 +12,28 @@ import { AccountTypeIcon } from "@/icons/account-type-icon";
 import { UserRole } from "@prisma/client";
 import { MailIcon } from "@/icons/mail-icon";
 
+
 type memberData = {
+  user: {
+    name: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+    role: UserRole;
+    access: {
+      id: string;
+      userId: string;
+      accessToLogbook: boolean;
+      accessToAuthority: boolean;
+      accessToFishing: boolean;
+      accessToPost: boolean;
+      accessToMarker: boolean;
+      accessToTournament: boolean;
+      accessToCatches: boolean;
+      accessToInspect: boolean;
+    }[];
+  };
   id: string;
-  name: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  role: UserRole;
-  access: {
-    id: string;
-    userId: string;
-    accessToLogbook: boolean;
-    accessToAuthority: boolean;
-  }[];
 } | null;
 
 interface EditMemberFormProps {
@@ -53,21 +62,21 @@ export const EditMemberForm = ({ memberData }: EditMemberFormProps) => {
         <div className="flex flex-col gap-4 w-full">
         <Input
             defaultValue={memberData?.id ? memberData.id : undefined}
-            name="userId"
-            label="User Id"
+            name="memberId"
+            label="Member ID"
             type="text"
             isDisabled={isReadonly}
             variant="bordered"
             placeholder="Enter member's username"
-            isInvalid={!!formState.errors.userId}
-            errorMessage={formState.errors.userId?.at(0)}
+            isInvalid={!!formState.errors.memberId}
+            errorMessage={formState.errors.memberId?.at(0)}
             className="hidden"
             endContent={
               <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
             }
           />
           <Input
-            defaultValue={memberData?.name ? memberData?.name : undefined}
+            defaultValue={memberData?.user.name ? memberData?.user.name : undefined}
             name="username"
             label="Username"
             type="text"
@@ -82,7 +91,7 @@ export const EditMemberForm = ({ memberData }: EditMemberFormProps) => {
           />
           <Input
             defaultValue={
-              memberData?.firstName ? memberData?.firstName : undefined
+              memberData?.user.firstName ? memberData?.user.firstName : undefined
             }
             name="firstName"
             isDisabled={isReadonly}
@@ -98,7 +107,7 @@ export const EditMemberForm = ({ memberData }: EditMemberFormProps) => {
           />
           <Input
             defaultValue={
-              memberData?.lastName ? memberData?.lastName : undefined
+              memberData?.user.lastName ? memberData?.user.lastName : undefined
             }
             name="lastName"
             isDisabled={isReadonly}
@@ -114,7 +123,7 @@ export const EditMemberForm = ({ memberData }: EditMemberFormProps) => {
           />
           <Input
             defaultValue={
-              memberData?.email ? memberData?.email : undefined
+              memberData?.user.email ? memberData?.user.email : undefined
             }
             name="email"
             isDisabled={isReadonly}
@@ -133,7 +142,7 @@ export const EditMemberForm = ({ memberData }: EditMemberFormProps) => {
             label="User role"
             name="role"
             placeholder="Choose user role"
-            defaultSelectedKeys={[String(memberData?.role)]}
+            defaultSelectedKeys={[String(memberData?.user.role)]}
             variant="bordered"
             isInvalid={!!formState.errors.role}
             errorMessage={formState.errors.role?.at(0)}
@@ -144,7 +153,7 @@ export const EditMemberForm = ({ memberData }: EditMemberFormProps) => {
             <SelectItem key="USER" value="user">
               User
             </SelectItem>
-            <SelectItem key="INSCPECTOR" value="inspector">
+            <SelectItem key="INSPECTOR" value="inspector">
               Inspector
             </SelectItem>
           </Select>

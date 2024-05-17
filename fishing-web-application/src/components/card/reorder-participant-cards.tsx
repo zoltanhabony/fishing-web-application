@@ -55,6 +55,7 @@ export const ReorderParticipantCards = ({
           </Reorder.Item>
         ))}
       </Reorder.Group>
+      {items.length === 0 ? <p className="text-sm ">No member has applied yet</p> :
       <form action={action}>
       <Input
             defaultValue={tournamentId}
@@ -98,6 +99,7 @@ export const ReorderParticipantCards = ({
         )}
       <Button className="mt-5" color="primary" fullWidth type="submit">Change Order</Button>
       </form>
+      }
     </div>
   );
 };
