@@ -185,7 +185,6 @@ export async function editPost(
             mainTitle: result.data.mainTitle,
             summary: result.data.summary,
             content: result.data.content,
-            memberId: member.id,
             fisheryAuthorityId: currentAuthority.id
         }
     })

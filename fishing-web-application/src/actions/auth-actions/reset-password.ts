@@ -2,7 +2,7 @@
 
 import * as schemas from "@/helpers/schemas/validation-schema";
 import { getUserByEmail } from "@/data/user";
-import { sendPasswordResetEmail } from "@/lib/mail";
+import { sendPasswordResetEmail } from "@/utils/mail";
 import { generatePasswordResetToken } from "@/lib/tokens";
 
 interface ResetPasswordFormState {

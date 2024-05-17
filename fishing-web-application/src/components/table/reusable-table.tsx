@@ -45,7 +45,7 @@ export const ReusableTable = <T,>(props: IReusableTableProps<T>) => {
       topContent={props.topContent}
       topContentPlacement="outside"
       sortDescriptor={undefined}
-
+      className="px-3"
       onSortChange={(descriptor: SortDescriptor) => {
         let params = new URLSearchParams(props.searchParams.toString())
         let sort = descriptor.column as string

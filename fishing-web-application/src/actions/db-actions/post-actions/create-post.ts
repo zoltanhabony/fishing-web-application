@@ -52,7 +52,15 @@ export async function createPost(
     };
   }
 
-  if (session.user.role !== "OPERATOR") {
+  const access = await db.access.findFirst({
+    where:{
+      user:{
+        email: session.user.email
+      }
+    }
+  })
+
+  if (session.user.role !== "OPERATOR" && (session.user.role !== "INSPECTOR" && !access?.accessToPost)) {
     return {
       errors: {
         _form: ["Authorization failed!"],
@@ -69,7 +77,6 @@ export async function createPost(
     }
   })
 
-  console.log(currentAuthority)
 
   if(!currentAuthority){
     return {
@@ -107,7 +114,13 @@ export async function createPost(
     where: {
       user: {
         email: session?.user.email,
-        role: "OPERATOR"
+        OR:[
+          {
+            role: "OPERATOR"
+          },{
+            role: "INSPECTOR"
+          }
+        ]
       },
     },
     select: {
@@ -119,6 +132,8 @@ export async function createPost(
       },
     },
   });
+
+  console.log(memberships)
 
 
   const isMember = memberships.find((f)=>{

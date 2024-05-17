@@ -10,16 +10,15 @@ type city = {
 export async function GET(request: NextRequest) {
 
     const session = await auth();
+    let city: city[] = []
         if(session){
-            if(session.user.role === "OPERATOR" || session.user.role === "ADMIN"){
+            if(session.user.role === "OPERATOR"){
 
                 const name =  request.nextUrl.searchParams.get("name")
 
-                let city: city[] = []
-
                 if(name === "" || name === null){
                     return NextResponse.json(
-                        { cities: city, message: "Az adatok lekérése sikeresen megtörtént!"},
+                        { cities: city, message: "The data has been successfully retrieved!"},
                         { status: 200 })
                 }
 
@@ -38,12 +37,12 @@ export async function GET(request: NextRequest) {
                 
 
                 return NextResponse.json(
-                    { cities: city, message: "Az adatok lekérése sikeresen megtörtént!" },
+                    { cities: city, message: "The data has been successfully retrieved!" },
                     { status: 200 }
                 )
             }
             return NextResponse.json(
-                { message: "Az adatok lekérése sikertelen: Nincs megfelelő jogosultság az adatok lekéréséhez!" },
+                { cities: city, message: "Failed to retrieve the data: you do not have the right to retrieve the data!" },
                 { status: 301 }
             )
         }

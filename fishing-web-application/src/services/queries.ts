@@ -145,6 +145,21 @@ type markerDataResponse = {
   } | null;
 };
 
+type userAccessResponse = {
+  access: {
+    id: string;
+    userId: string;
+    accessToLogbook: boolean;
+    accessToAuthority: boolean;
+    accessToFishing: boolean;
+    accessToPost: boolean;
+    accessToMarker: boolean;
+    accessToTournament: boolean;
+    accessToCatches: boolean;
+    accessToInspect: boolean;
+  } | null;
+};
+
 export function useWaterAreas(q: string) {
   return useSWR<waterAreaResponse>(
     `/api/waterAreaHandler/getAllWaterArea?name=${q}`,
@@ -160,9 +175,27 @@ export function useUsers(q: string) {
   return useSWR<userResponse>(`/api/userHandler/getUsers?name=${q}`, fetcher);
 }
 
+export function useUsersForLogbook(q: string) {
+  return useSWR<userResponse>(
+    `/api/userHandler/getUsersForLogbook?name=${q}`,
+    fetcher
+  );
+}
+
+export function useUserAccess() {
+  return useSWR<userAccessResponse>("/api/userHandler/getUserAccess", fetcher);
+}
+
 export function useAuthorities(q: string) {
   return useSWR<authorityResponse>(
     `/api/authorityHandler/getAuthorities?name=${q}`,
+    fetcher
+  );
+}
+
+export function useAuthoritiesForLogbook(q: string) {
+  return useSWR<authorityResponse>(
+    `/api/authorityHandler/getAuthoritiesForLogbook?name=${q}`,
     fetcher
   );
 }
@@ -215,7 +248,7 @@ export function useMarkerById(q: string) {
   );
 }
 
-export function useAuthorityStat(q: string, p:string) {
+export function useAuthorityStat(q: string, p: string) {
   return useSWR<any>(
     `/api/statisticsHandler/getStatisticsByAuthority?authority=${q}&year=${p}`,
     fetcher,
@@ -242,29 +275,29 @@ export function useUserStat(q: string) {
   );
 }
 
-
 export function useOwnAuthorities() {
-  return useSWR<any>(
-    `/api/authorityHandler/getOwnAuthorities`,
-    fetcher,
-    {
-      onErrorRetry: (error) => {
-        // Never retry on 404.
-        if (error.status === 404) return;
-      },
-    }
-  );
+  return useSWR<any>(`/api/authorityHandler/getOwnAuthorities`, fetcher, {
+    onErrorRetry: (error) => {
+      // Never retry on 404.
+      if (error.status === 404) return;
+    },
+  });
 }
 
 export function usePostById(q: string) {
-  return useSWR<any>(
-    `/api/postHandler/getPostById?id=${q}`,
-    fetcher,
-    {
-      onErrorRetry: (error) => {
-        // Never retry on 404.
-        if (error.status === 404) return;
-      },
-    }
-  );
+  return useSWR<any>(`/api/postHandler/getPostById?id=${q}`, fetcher, {
+    onErrorRetry: (error) => {
+      // Never retry on 404.
+      if (error.status === 404) return;
+    },
+  });
+}
+
+export function usePostByIdForEdit(q: string) {
+  return useSWR<any>(`/api/postHandler/getPostByIdForEdit?id=${q}`, fetcher, {
+    onErrorRetry: (error) => {
+      // Never retry on 404.
+      if (error.status === 404) return;
+    },
+  });
 }

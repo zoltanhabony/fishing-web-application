@@ -10,8 +10,15 @@ type user = {
 export async function GET(request: NextRequest) {
 
         const session = await auth()
+        const access = await db.access.findFirst({
+            where: {
+                user:{
+                    email: session?.user.email
+                }
+            }
+        })
         if(session){
-            if(session.user.role === "OPERATOR" || session.user.role === "ADMIN"){
+            if(session.user.role === "OPERATOR" || (session.user.role === "INSPECTOR" && access?.accessToAuthority)){
 
                 const name =  request.nextUrl.searchParams.get("name")
 

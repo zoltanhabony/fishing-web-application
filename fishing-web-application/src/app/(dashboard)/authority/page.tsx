@@ -45,7 +45,7 @@ export default async function AuthorityPage({
     );
   }
 
-  if (session.user.role === "OPERATOR" || session?.user.role === "INSPECTOR") {
+  if (session.user.role === "OPERATOR") {
     return (
       <div className="p-5 h-full">
         <h1 className="text-[30px] pb-5">Authorities</h1>

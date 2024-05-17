@@ -6,7 +6,11 @@ import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
-import { useOwnAuthorities, usePostById } from "@/services/queries";
+import {
+  useOwnAuthorities,
+  usePostByIdForEdit,
+  useUserAccess,
+} from "@/services/queries";
 import { NewPostForm } from "@/components/form/new-post-form";
 import { EditPostForm } from "@/components/form/edit-post-form";
 
@@ -22,17 +26,17 @@ export default function NewPostPage(props: PostEditPageProps) {
   const session = useSession();
 
   const authorities = useOwnAuthorities();
+  const access = useUserAccess();
 
-  const post = usePostById(props.params.id);
+  const post = usePostByIdForEdit(props.params.id);
 
   const [value, setValue] = useState<string>("**Create post**");
 
-
-  useEffect(()=>{
-    if(!post.isLoading){
-        setValue(post.data.post.content)
+  useEffect(() => {
+    if (!post.isLoading) {
+      setValue(post.data.post.content);
     }
-  },[post.data, post.isLoading])
+  }, [post.data, post.isLoading]);
 
   if (!session) {
     return (
@@ -52,30 +56,10 @@ export default function NewPostPage(props: PostEditPageProps) {
     );
   }
 
-  if (session.data?.user.role !== "OPERATOR") {
-    return (
-      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
-        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-          <h1 className="text-[30px]">Edit Post</h1>
-        </CardHeader>
-        <CardBody>
-          <div className="space-y-1">
-            <FormSections
-              title={"Authorization failed!"}
-              description={"You have no right to edit!"}
-            />
-          </div>
-        </CardBody>
-      </Card>
-    );
-  }
-
-  
-
-  if (post.isLoading || authorities.isLoading) {
+  if (post.isLoading || authorities.isLoading || access.isLoading) {
     return (
       <div className="p-5 h-full">
-        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
+        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
           <CardHeader className="mobile:block flex flex-col">
             <h1 className="text-[30px]">Edit Post</h1>
           </CardHeader>
@@ -93,18 +77,42 @@ export default function NewPostPage(props: PostEditPageProps) {
     );
   }
 
-  if (Object.keys(post.data.post).length === 0) {
-
+  if (
+    session.data?.user.role !== "OPERATOR" &&
+    (session.data?.user.role !== "INSPECTOR" || !access.data?.access?.accessToPost)){
     return (
-      <div className="p-5 h-full">
-      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
-        <CardHeader className="mobile:block flex flex-col">
-        <h1 className="text-[30px]">Edit Post</h1>
+      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
+        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+          <h1 className="text-[30px]">Edit Post</h1>
         </CardHeader>
         <CardBody>
-          No post found
+          <div className="space-y-1">
+            <FormSections
+              title={"No permission!"}
+              description={"You have no right to edit this post!"}
+            />
+          </div>
         </CardBody>
       </Card>
+    );
+  }
+
+  if (Object.keys(post.data.post).length === 0) {
+    return (
+      <div className="p-5 h-full">
+        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
+          <CardHeader className="mobile:block flex flex-col">
+            <h1 className="text-[30px]">Edit Post</h1>
+          </CardHeader>
+          <CardBody>
+          <FormSections
+              title={"Edit Post"}
+              description={
+                "The post cannot be found or you do not have permission to edit it!"
+              }
+            />
+          </CardBody>
+        </Card>
       </div>
     );
   }
@@ -137,7 +145,7 @@ export default function NewPostPage(props: PostEditPageProps) {
         <MdEditor
           value={value}
           onChange={setValue as () => void}
-          className="bg-transparent h-screen"
+          className=" h-screen bg-transparent text-white"
         />
       </div>
     </div>

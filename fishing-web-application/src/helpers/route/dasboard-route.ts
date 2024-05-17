@@ -4,6 +4,7 @@ import { BookmarkIcon } from "@/icons/sidebar-icons/bookmark-icon"
 import { DashboardIcon } from "@/icons/sidebar-icons/dashboard-icon"
 import { FishIcon } from "@/icons/sidebar-icons/fish-icon"
 import { HomeIcon } from "@/icons/sidebar-icons/home-icon"
+import { InspectIcon } from "@/icons/sidebar-icons/inspect-icon"
 import { MapIcon } from "@/icons/sidebar-icons/map-icon"
 import { NewspaperIcon } from "@/icons/sidebar-icons/newspaper-icon"
 import { StatisticsIcon } from "@/icons/sidebar-icons/statistics-icon"
@@ -42,7 +43,7 @@ const authority : RouteType = {
     href: "/authority",
     title: "Authority",
     icon: HomeIcon,
-    role:  ["OPERATOR", "INSPECTOR"],
+    role:  ["OPERATOR"],
     access: {
         accessToAuthority: true
     }
@@ -54,7 +55,7 @@ const catches : RouteType = {
     icon: FishIcon,
     role:  ["OPERATOR", "INSPECTOR"],
     access: {
-        accessToAuthority: true
+        accessToCatches: true
     }
 }
 
@@ -101,10 +102,21 @@ const tournament : RouteType = {
 }
 
 
+const inspect : RouteType = {
+    href: "/inspect",
+    title: "Inspect",
+    icon: InspectIcon,
+    role:  ["OPERATOR", "INSPECTOR"],
+    access: {
+        accessToInspect: true
+    }
+}
+
+
 export const defaultRoutes: RouteType[] = [
     dashboard,
 ]
 
 export const mainMenuRoutes: RouteType[] = [
-    logBook, authority, catches, member, map, statistics, post,tournament
+    logBook, authority, catches, member, map, statistics, post,tournament, inspect
 ]

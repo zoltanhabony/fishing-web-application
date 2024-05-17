@@ -7,6 +7,7 @@ import { ReusableTable } from "./table/reusable-table";
 import React, { useCallback } from "react";
 import { memberRenderCell, columns } from "./table/member-cell";
 import { UserRole } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 //interface to the table (data, allDataCountInDatabase)
 type memberTableResponse = {
@@ -42,10 +43,11 @@ export default function MembersTable({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const session = useSession()
  
   const renderCell = useCallback(
     (members: memberTableResponse, columnKey: React.Key) => {
-      return memberRenderCell(members, columnKey);
+      return memberRenderCell(members, session.data?.user.role, columnKey);
     },
     []
   );

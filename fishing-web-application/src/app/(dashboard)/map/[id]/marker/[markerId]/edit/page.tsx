@@ -5,7 +5,7 @@ import { Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useEffect, useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
-import { useMapById, useMarkerById } from "@/services/queries";
+import { useMapById, useMarkerById, useUserAccess } from "@/services/queries";
 import { EditMarkerForm } from "@/components/form/edit-marker-form";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@prisma/client";
@@ -31,6 +31,7 @@ export default function EditMarkerPage(props: MarkerCreatePageProps) {
 
   const map = useMapById(props.params.id);
   const marker = useMarkerById(props.params.markerId);
+  const access = useUserAccess()
 
   const [center, setCenter] = useState([47.497912, 19.040235]);
   const [zoom, setZoom] = useState(14);
@@ -50,7 +51,7 @@ export default function EditMarkerPage(props: MarkerCreatePageProps) {
     }
   }, [map.data, map.isLoading, marker.data, marker.isLoading]);
 
-  if (map.isLoading || marker.isLoading) {
+  if (map.isLoading || marker.isLoading || access.isLoading) {
     return <div>Map data is loading...</div>;
   }
 
@@ -70,6 +71,26 @@ export default function EditMarkerPage(props: MarkerCreatePageProps) {
             </div>
           </CardBody>
         </Card>
+      </div>
+    );
+  }
+
+  if(!access.data?.access || !access.data.access.accessToMarker){
+    return (
+      <div className="w-full">
+        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
+        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+          <h1 className="text-[30px]">Edit Marker</h1>
+        </CardHeader>
+        <CardBody>
+          <div className="space-y-1">
+            <FormSections
+              title={"You cannot edit this marker!"}
+              description={"You do not have access to edit markers!"}
+            />
+          </div>
+        </CardBody>
+      </Card>
       </div>
     );
   }
@@ -98,7 +119,7 @@ export default function EditMarkerPage(props: MarkerCreatePageProps) {
     <div className="p-5 h-full overflow-hidden block">
       <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col">
-          <h1 className="text-[30px]">Edit New Marker</h1>
+          <h1 className="text-[30px]">Edit Marker</h1>
         </CardHeader>
         <CardBody>
           <div className="space-y-1">

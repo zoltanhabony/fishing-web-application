@@ -13,31 +13,37 @@ import { useState } from "react";
 import { EditIcon } from "@/icons/edit-icon";
 import { CancelIcon } from "@/icons/cancel-icon";
 import { UserRole } from "@prisma/client";
-import { InfromationIcon } from "@/icons/information-icon";
 
 type memberData = {
+  user: {
+    name: string | null;
+    firstName: string | null;
+    lastName: string | null;
+    email: string | null;
+    role: UserRole;
+    access: {
+      id: string;
+      userId: string;
+      accessToLogbook: boolean;
+      accessToAuthority: boolean;
+      accessToFishing: boolean;
+      accessToPost: boolean;
+      accessToMarker: boolean;
+      accessToTournament: boolean;
+      accessToCatches: boolean;
+      accessToInspect: boolean;
+    }[];
+  };
   id: string;
-  name: string | null;
-  firstName: string | null;
-  lastName: string | null;
-  email: string | null;
-  role: UserRole;
-  access: {
-    id: string;
-    userId: string;
-    accessToLogbook: boolean;
-    accessToAuthority: boolean;
-    accessToFishing: boolean;
-  }[];
 } | null;
 
 interface EditMemberFormProps {
   memberData: memberData;
 }
 
-export const ModifyMemberAccessForm = ({ memberData }: EditMemberFormProps) => {
+export const ModifyUserAccessForm = ({ memberData }: EditMemberFormProps) => {
   const [isReadonly, setIsReadonly] = useState<boolean>(true);
-  const [formState, action] = useFormState(actions.updateMemberPermissions, {
+  const [formState, action] = useFormState(actions.updateUserPermissions, {
     errors: {},
   });
 
@@ -57,44 +63,21 @@ export const ModifyMemberAccessForm = ({ memberData }: EditMemberFormProps) => {
         <div className="flex flex-col gap-4 w-full">
           <Input
             defaultValue={memberData?.id ? memberData.id : undefined}
-            name="userId"
-            label="User Id"
+            name="memberId"
+            label="Member ID"
             type="text"
             isDisabled={isReadonly}
             variant="bordered"
-            placeholder="Enter member's username"
+            placeholder="Enter member's ID"
             className="hidden"
-            isInvalid={!!formState.errors.userId}
-            errorMessage={formState.errors.userId?.at(0)}
+            isInvalid={!!formState.errors.memberId}
+            errorMessage={formState.errors.memberId?.at(0)}
             endContent={
               <UserIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
             }
           />
-
-          {memberData?.role === UserRole.OPERATOR ||
-          memberData?.role === UserRole.INSPECTOR ? (
-            <>
-              <Checkbox
-                defaultSelected={memberData?.access[0].accessToAuthority}
-                value={"accessToAuthority"}
-                isDisabled={isReadonly}
-                name="accessToAuthority"
-                size="sm"
-              >
-                <div className="flex items-center">
-                  <p className="pr-3">Access to authority</p>
-                  <Tooltip content="I am a tooltip">
-                    <InfromationIcon />
-                  </Tooltip>
-                </div>
-              </Checkbox>
-            </>
-          ) : (
-            ""
-          )}
-
           <Checkbox
-           defaultSelected={memberData?.access[0].accessToLogbook}
+           defaultSelected={memberData?.user.access[0].accessToLogbook}
             isDisabled={isReadonly}
             size="sm"
             name="accessToLogbook"
@@ -105,7 +88,7 @@ export const ModifyMemberAccessForm = ({ memberData }: EditMemberFormProps) => {
             </div>
           </Checkbox>
           <Checkbox
-          defaultSelected={memberData?.access[0].accessToFishing}
+          defaultSelected={memberData?.user.access[0].accessToFishing}
             isDisabled={isReadonly}
             size="sm"
             name="accessToFishing"
@@ -113,6 +96,30 @@ export const ModifyMemberAccessForm = ({ memberData }: EditMemberFormProps) => {
           >
             <div className="flex items-center">
               <p className="pr-3">Access to Fishing</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox
+          defaultSelected={memberData?.user.access[0].accessToTournament}
+            isDisabled={isReadonly}
+            size="sm"
+            name="accessToTournament"
+            value={"accessToTournament"}
+          >
+            <div className="flex items-center">
+              <p className="pr-3">Access to Tournament</p>
+            </div>
+          </Checkbox>
+
+          <Checkbox
+          defaultSelected={memberData?.user.access[0].accessToMarker}
+            isDisabled={isReadonly}
+            size="sm"
+            name="accessToMarker"
+            value={"accessToMarker"}
+          >
+            <div className="flex items-center">
+              <p className="pr-3">Access to Marker</p>
             </div>
           </Checkbox>
         </div>

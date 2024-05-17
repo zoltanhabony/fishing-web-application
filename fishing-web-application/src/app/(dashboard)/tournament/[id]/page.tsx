@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import { ParticipantCard } from "@/components/card/participants-card";
 import { ApplyTournamentForm } from "@/components/form/apply-tournament-form";
 import { DeregisterTournamentForm } from "@/components/form/deregister-tournament-form";
-import { EditAuthorityForm } from "@/components/form/edit-authority-form";
 import { FormSections } from "@/components/form/form-section";
 
 import db from "@/lib/db";
@@ -18,9 +17,21 @@ export default async function TournamentViewPage(
 ) {
   const id = props.params.id;
 
+  if (!id) {
+    return <div>No content</div>;
+  }
+
   const session = await auth();
 
   const member = await db.member.findFirst({
+    where: {
+      user: {
+        email: session?.user.email,
+      },
+    },
+  });
+
+  const access = await db.access.findFirst({
     where: {
       user: {
         email: session?.user.email,
@@ -75,6 +86,10 @@ export default async function TournamentViewPage(
     },
   });
 
+  if (!tournament) {
+    return <div>No content</div>;
+  }
+
   const participants = await db.participant.findMany({
     where: {
       tournamentId: tournament?.id,
@@ -119,10 +134,6 @@ export default async function TournamentViewPage(
     },
   });
 
-  if (!id) {
-    return <div>No content</div>;
-  }
-
   return (
     <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
@@ -140,7 +151,9 @@ export default async function TournamentViewPage(
           </h2>
           <div className="space-y-3">
             <h2 className="font-bold text-xl">{tournament?.tournamentName}</h2>
-            <p className="text-md">{tournament?.tournamentDescription}</p>
+            <p className="text-md text-default-500">
+              {tournament?.tournamentDescription}
+            </p>
             <div>
               <p>
                 <span className="font-bold">Torunament type:</span>
@@ -204,7 +217,7 @@ export default async function TournamentViewPage(
               </span>
             </p>
           </div>
-          {member && !tournament?.isFinished ? (
+          {(tournament.maxParticipants > numberOfParticipants._count.id) && Boolean(access?.accessToTournament) && member && !tournament?.isFinished ? (
             isParticipant ? (
               <DeregisterTournamentForm id={String(tournament?.id)} />
             ) : (

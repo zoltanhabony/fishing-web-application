@@ -11,7 +11,7 @@ import { revalidatePath } from "next/cache";
 
 interface SettingsFormState {
   errors: {
-    userId?: string[];
+    memberId?: string[];
     username?: string[];
     email?: string[];
     firstName?: string[];
@@ -29,28 +29,36 @@ export const updateMemberDetails = async (
   formData: FormData
 ): Promise<SettingsFormState> => {
   const data = {
-    userId: formData.get("userId"),
+    memberId: formData.get("memberId"),
     username: formData.get("username"),
     email: formData.get("email"),
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
-    role: formData.get("role")
+    role: formData.get("role"),
   };
-
 
   const result = schemas.memberSchema.safeParse(data);
 
-
   if (!result.success) {
-    console.log(result.error.flatten().fieldErrors)
+    console.log(result.error.flatten().fieldErrors);
     return {
       errors: result.error.flatten().fieldErrors,
     };
   }
 
-  const user = await db.user.findUnique({ where: { id: result.data.userId } });
-
-  if (!user) {
+  const member = await db.member.findUnique({
+    where: { id: result.data.memberId },
+    select:{
+      id: true,
+      user:{
+        select:{
+          id:true,
+          email:true
+        }
+      }
+    },
+  });
+  if (!member) {
     return {
       errors: {
         _form: ["Failed data modification!"],
@@ -61,12 +69,14 @@ export const updateMemberDetails = async (
     };
   }
 
-  const usernameReserved = await db.user.findUnique({
+  const usernameReserved = await db.member.findFirst({
     where: {
       NOT: {
-        id: result.data.userId,
+        id: result.data.memberId,
       },
-      name: result.data.username,
+      user: {
+        name: result.data.username,
+      },
     },
   });
 
@@ -77,32 +87,37 @@ export const updateMemberDetails = async (
       },
     };
   }
-
-  if(!(result.data.role as string in UserRole)){
+  console.log(result.data.role);
+  if (!((result.data.role as string) in UserRole)) {
     return {
-        errors: {
-          _form: ["Failed data modification!"],
-          subtitle: "Failure to save the data!",
-          status: "error",
-          description: "User role cannot be found!",
-        },
-      };
+      errors: {
+        _form: ["Failed data modification!"],
+        subtitle: "Failure to save the data!",
+        status: "error",
+        description: "User role cannot be found!",
+      },
+    };
   }
 
-  if(result.data.role as UserRole !== UserRole.USER && result.data.role as UserRole !== UserRole.INSPECTOR){
+  if (
+    (result.data.role as UserRole) !== UserRole.USER &&
+    (result.data.role as UserRole) !== UserRole.INSPECTOR
+  ) {
     return {
-        errors: {
-          role: ["User role must be USER or INSPECTOR!"],
-        },
-      };
+      errors: {
+        role: ["User role must be USER or INSPECTOR!"],
+      },
+    };
   }
 
-  const emailReserved = await db.user.findUnique({
+  const emailReserved = await db.member.findFirst({
     where: {
       NOT: {
-        id: result.data.userId,
+        id: result.data.memberId,
       },
-      email: result.data.email,
+      user: {
+        email: result.data.email,
+      },
     },
   });
 
@@ -114,7 +129,7 @@ export const updateMemberDetails = async (
     };
   }
 
-  if(user.email !== result.data.email){
+  if (member.user.email !== result.data.email) {
     const twoFactorToken = await generateTwoFactorToken(result.data.email);
     await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
   }
@@ -122,18 +137,53 @@ export const updateMemberDetails = async (
   try {
     await db.user.update({
       where: {
-        id: result.data.userId,
+        id: member.user.id,
       },
       data: {
         name: result.data.username,
         firstName: result.data.firstName,
         lastName: result.data.lastName,
-        role: result.data.role as UserRole
+        role: result.data.role as UserRole,
       },
     });
 
-    revalidatePath("/member/[id]/edit")
-  
+    if(result.data.role as UserRole === UserRole.INSPECTOR){
+      await db.access.update({
+        where: {
+          userId: member.user.id,
+        },
+        data:{
+            accessToInspect: true,
+            accessToCatches:true
+        }
+      })
+
+      revalidatePath("/member/[id]/edit");
+
+      return {
+        errors: {
+          _form: ["Settings updated!"],
+          subtitle: "Successful data modification!",
+          status: "success",
+          description:
+            "You have successfully changed your details! If you have also changed your email, you will receive a confirmation link to your email.",
+        },
+      };
+    }
+
+    await db.access.update({
+      where: {
+        userId: member.user.id,
+      },
+      data:{
+          accessToAuthority:false,
+          accessToCatches: false,
+          accessToInspect: false,
+          accessToPost: false,
+      }
+    })
+
+    revalidatePath("/member/[id]/edit");
     return {
       errors: {
         _form: ["Settings updated!"],
@@ -149,7 +199,7 @@ export const updateMemberDetails = async (
         _form: ["Failed data modification!"],
         subtitle: "Failure to save the data!",
         status: "error",
-        description: String(error)
+        description: String(error),
       },
     };
   }

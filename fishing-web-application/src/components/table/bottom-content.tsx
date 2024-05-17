@@ -30,7 +30,6 @@ export const BottomContent = ({
         color="primary"
         page={searchParams.get("page")? Number(searchParams.get("page")) : 1}
         total={pages}
-        //itt a hiba
         onChange={(page)=>{
           params.set("page", ""+page)
           router.replace(`${pathname}?${params.toString()}`)

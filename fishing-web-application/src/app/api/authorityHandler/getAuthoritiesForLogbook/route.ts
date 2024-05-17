@@ -19,8 +19,19 @@ export async function GET(request: NextRequest) {
             }
         })
 
-        if(session){
+        const authorities = await db.fisheryAuthority.findMany({where: {
+            member:{
+                some:{
+                    user:{
+                        email: session?.user.email
+                    }
+                }
+            }
+        }})
 
+        
+
+        if(session){
             if(session.user.role === "OPERATOR" || (session.user.role === "INSPECTOR" && access?.accessToAuthority)){
 
                 const name =  request.nextUrl.searchParams.get("name")
@@ -35,6 +46,8 @@ export async function GET(request: NextRequest) {
 
                 authority = await db.fisheryAuthority.findMany({
                     where:{
+                        OR: authorities,
+                        
                         fisheryAuthorityName: {
                             contains: name,
                             mode: 'insensitive'

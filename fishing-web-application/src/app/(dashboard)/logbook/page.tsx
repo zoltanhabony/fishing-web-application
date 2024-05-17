@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { FormSections } from "@/components/form/form-section";
 import LogbookTable from "@/components/member-table";
 import UserCatchesTable from "@/components/user-catches-table";
+import db from "@/lib/db";
 import { Card, CardBody, CardHeader } from "@nextui-org/react";
 
 export const dynamic = "force-dynamic";
@@ -26,9 +27,17 @@ export default async function LogBookPage({
   const direction = searchParams?.direction || "ascending";
   const isSaved = searchParams?.isSaved || "undefined";
 
+  const access = await db.access.findFirst({
+    where:{
+      user:{
+        email: session?.user.email
+      }
+    }
+  })
+
   if (!session) {
     return (
-      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
+      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
           <h1 className="text-[30px]">Logbook</h1>
         </CardHeader>
@@ -37,26 +46,6 @@ export default async function LogBookPage({
             <FormSections
               title={"Authorization failed!"}
               description={"There is no valid session! Sign in again!"}
-            />
-          </div>
-        </CardBody>
-      </Card>
-    );
-  }
-
-  if (session.user.role === "OPERATOR") {
-    return (
-      <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
-        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-          <h1 className="text-[30px]">Logbook</h1>
-        </CardHeader>
-        <CardBody>
-          <div className="space-y-1">
-            <FormSections
-              title={"You have no logbook!"}
-              description={
-                "You don't have logbook! This feature only available for users."
-              }
             />
           </div>
         </CardBody>
@@ -73,7 +62,7 @@ export default async function LogBookPage({
     isSaved
   );
 
-  if (session.user.role === "USER" || session.user.role === "INSPECTOR") {
+  if (session.user.role === "USER" && access?.accessToLogbook && access.accessToFishing || session.user.role === "INSPECTOR" && access?.accessToLogbook && access.accessToFishing) {
     return (
       <div className="p-5 h-full">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
@@ -97,4 +86,22 @@ export default async function LogBookPage({
       </div>
     );
   }
+
+  return (
+    <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
+      <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+        <h1 className="text-[30px]">Logbook</h1>
+      </CardHeader>
+      <CardBody>
+        <div className="space-y-1">
+          <FormSections
+            title={"You have no logbook or permisson!"}
+            description={
+              "No catch logbook! This function is only available to users who are members and have a catch logbook"
+            }
+          />
+        </div>
+      </CardBody>
+    </Card>
+  );
 }

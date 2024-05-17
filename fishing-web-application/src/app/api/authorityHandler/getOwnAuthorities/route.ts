@@ -4,43 +4,64 @@ import { auth } from "@/auth";
 import { UserRole } from "@prisma/client";
 
 type authority = {
-    id: string,
-    fisheryAuthorityName:  string,
-}
+  id: string;
+  fisheryAuthorityName: string;
+};
 
 export async function GET(request: NextRequest) {
   const session = await auth();
-  const emptyAuthorities: authority[] = []
+  const emptyAuthorities: authority[] = [];
+
+  const access = await db.access.findFirst({
+    where: {
+        user:{
+            email: session?.user.email
+        }
+    }
+})
+
   if (session) {
     try {
-
+      if (
+        session.user.role === "OPERATOR" ||
+        (session.user.role === "INSPECTOR" && access?.accessToAuthority)
+      ) {
         const authorities = await db.member.findMany({
-            where: {
-              user: {
-                email: session?.user.email,
+          where: {
+            user: {
+              email: session?.user.email,
+            },
+          },
+          select: {
+            fisheryAuthority: {
+              select: {
+                fisheryAuthorityName: true,
+                id: true,
               },
             },
-            select: {
-              fisheryAuthority: {
-                select: {
-                  fisheryAuthorityName: true,
-                  id: true,
-                },
-              },
-            },
-          });
+          },
+        });
 
+        return NextResponse.json(
+          {
+            authorities: authorities,
+            message: "The data has been successfully retrieved!",
+          },
+          { status: 200 }
+        );
+      }
       return NextResponse.json(
         {
-            authorities: authorities, message: "The data has been successfully retrieved!" 
+          authorities: emptyAuthorities,
+          message: "Data retrieval failed: access denide!",
         },
-        { status: 200 }
+        { status: 301 }
       );
     } catch (error) {
       return NextResponse.json(
         {
           authorities: emptyAuthorities,
-          message: "Az adatok lekérése sikeresen megtörtént!",
+          message: "The data has been successfully retrieved!",
         },
         { status: 200 }
       );
@@ -49,8 +70,8 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json(
     {
-    authorities: emptyAuthorities,
-      message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!",
+      authorities: emptyAuthorities,
+      message: "Data retrieval failed: no valid session!",
     },
     { status: 301 }
   );
