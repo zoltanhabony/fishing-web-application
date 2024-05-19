@@ -30,7 +30,6 @@ export async function createLogbook(
   const result = schemas.createLogbookSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
     return {
       errors: result.error.flatten().fieldErrors,
     };

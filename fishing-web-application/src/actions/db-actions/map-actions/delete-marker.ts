@@ -130,7 +130,6 @@ const isOperator = await db.marker.findUnique({
       };
   }
 
-  console.log(!isMember && !isOperator)
 
   try {
     
@@ -143,7 +142,7 @@ const isOperator = await db.marker.findUnique({
         },
     });
     
-    console.log("success")
+
 
     revalidatePath('/map/[id]', 'page')
 

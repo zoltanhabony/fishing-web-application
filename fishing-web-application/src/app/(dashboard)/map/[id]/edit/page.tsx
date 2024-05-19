@@ -44,8 +44,6 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
     return <div>Map data is loading...</div>;
   }
 
-  console.log(map.data)
-
 
   if (!session) {
     return (

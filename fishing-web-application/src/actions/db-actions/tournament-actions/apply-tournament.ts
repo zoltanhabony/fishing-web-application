@@ -29,7 +29,6 @@ export async function applyForTournament(
   const result = schemas.applyForTournamentSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
     return {
       errors: result.error.flatten().fieldErrors,
     };

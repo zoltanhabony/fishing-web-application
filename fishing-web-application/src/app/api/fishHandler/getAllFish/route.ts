@@ -19,13 +19,13 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json(
-      { fishes: fishes, message: "Az adatok lekérése sikeresen megtörtént!" },
+      { fishes: fishes, message: "The data has been successfully retrieved!" },
       { status: 200 }
     );
   }
 
   return NextResponse.json(
-    { message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!" },
+    { message: "Data retrieval failed: no valid session!" },
     { status: 301 }
   );
 }

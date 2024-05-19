@@ -24,7 +24,19 @@ export async function createMarker(
   formSate: CreateMarkerFormState,
   formData: FormData
 ): Promise<CreateMarkerFormState> {
+  
   const session = await auth();
+
+  if (!session) {
+    return {
+      errors: {
+        _form: ["Authorization failed!"],
+        subtitle: "There is no valid session",
+        status: "error",
+        description: "There is no valid session! Sign in again! ",
+      },
+    };
+  }
 
   const data = {
     mapId: formData.get("mapId"),
@@ -38,19 +50,38 @@ export async function createMarker(
   const result = schemas.createMarkerSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
+   
     return {
       errors: result.error.flatten().fieldErrors,
     };
   }
 
-  if (!session) {
+  const access = await db.access.findFirst({
+    where: {
+      user: {
+        email : session.user.email
+      }
+    }
+  })
+
+  if(!access){
     return {
       errors: {
         _form: ["Authorization failed!"],
-        subtitle: "There is no valid session",
+        subtitle: "There is no access",
         status: "error",
-        description: "There is no valid session! Sign in again! ",
+        description: "You are not authorised to perform the operation!",
+      },
+    };
+  }
+
+  if(!access.accessToMarker){
+    return {
+      errors: {
+        _form: ["Authorization failed!"],
+        subtitle: "There is no access",
+        status: "error",
+        description: "You are not allowed to create markers on the map!",
       },
     };
   }
@@ -71,8 +102,6 @@ export async function createMarker(
       }
     },
   });
-
-  console.log(member)
 
   if (!member) {
     return {

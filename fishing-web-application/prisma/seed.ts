@@ -250,7 +250,6 @@ export const seed = async () => {
 seed()
   .catch((e) => {
     console.error(e);
-    console.log(target);
 
     process.exit(1);
   })

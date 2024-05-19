@@ -50,7 +50,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
 
       try {
         const result = await mailjetClient.post('send', { version: 'v3.1' }).request(emailData);
-        console.log('Email sent successfully!');
+  
       } catch (error) {
         throw error;
       }

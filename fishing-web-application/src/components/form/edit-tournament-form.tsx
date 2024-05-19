@@ -49,6 +49,10 @@ interface EditTournamentFormProps {
 
 export const EditTournamentForm = ({ props }: EditTournamentFormProps) => {
   const [authority, setAuthority] = useState<string>("");
+  const [value, setValue] = useState<string>(String(props.fishId));
+  const handleSelectionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(e.target.value);
+  };
 
   const [authorityName] = useDebounce<string>(authority, 1500);
 
@@ -70,7 +74,7 @@ export const EditTournamentForm = ({ props }: EditTournamentFormProps) => {
   const startDateYear = props.startDate.getFullYear()
   const startDateMonth = props.startDate.getMonth().toString().length === 1 ? "0" + (props.startDate.getMonth()+1) : props.startDate.getMonth()+1
   const startDateDay = props.startDate.getDate().toString().length === 1 ? "0" +props.startDate.getDate(): props.startDate.getDate()
-
+  
   return (
     <>
       <form action={action} className="space-y-3 w-full pt-3">
@@ -222,7 +226,9 @@ export const EditTournamentForm = ({ props }: EditTournamentFormProps) => {
             description="The following field is optional, if the competition is restricted to certain fish species, please tick."
           />
           <Select
-          defaultSelectedKeys={props.fishId ? [props.fishId] : undefined}
+           onChange={handleSelectionChange}
+            selectedKeys={[value]}
+            defaultSelectedKeys={[String(props.fishId)]}
             name="fishId"
             label="Fish"
             placeholder="Select a fish type"

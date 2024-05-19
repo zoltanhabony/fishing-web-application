@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { auth } from "@/auth";
-import { UserRole } from "@prisma/client";
 
 type authority = {
   id: string;
@@ -50,12 +49,13 @@ export async function GET(request: NextRequest) {
           { status: 200 }
         );
       }
+
       return NextResponse.json(
         {
           authorities: emptyAuthorities,
           message: "Data retrieval failed: access denide!",
         },
-        { status: 301 }
+        { status: 200 }
       );
     } catch (error) {
       return NextResponse.json(

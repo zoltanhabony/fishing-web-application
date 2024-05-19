@@ -34,7 +34,6 @@ export async function createMap(
   const result = schemas.createMapSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
     return {
       errors: result.error.flatten().fieldErrors,
     };

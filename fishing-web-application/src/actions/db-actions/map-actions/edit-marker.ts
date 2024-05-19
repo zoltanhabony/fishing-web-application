@@ -40,7 +40,6 @@ export async function editMarker(
   const result = schemas.editMarkerSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
     return {
       errors: result.error.flatten().fieldErrors,
     };

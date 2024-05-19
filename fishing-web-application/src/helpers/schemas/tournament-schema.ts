@@ -73,18 +73,12 @@ export const editTournamentSchema = z.object({
     .date({
       required_error: "Please select a date and time",
       invalid_type_error: "That's not a date!",
-    })
-    .min(new Date(), {
-      message: "The deadline must be at least today's date!",
     }),
 
   startDate: z
     .date({
       required_error: "Please select a date and time",
       invalid_type_error: "That's not a date!",
-    })
-    .min(new Date(), {
-      message: "The start date must be at least today's date!",
     }),
     fishId: z.string().nullable(),
     isFinished: z.boolean()

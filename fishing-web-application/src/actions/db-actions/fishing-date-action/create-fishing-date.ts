@@ -74,7 +74,6 @@ export async function createFishingDate(
     }
   })
 
-  console.log(Boolean(haveFishingDate))
 
   try {
 

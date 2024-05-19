@@ -70,7 +70,6 @@ export const EditLogbookForm = (data: EditLogbookFormProps) => {
   const onUserInputChange = (value: string) => {
     setUser(value);
   };
-  console.log(data.data.member?.user.name)
 
   const year = data.data.expiresDate.getFullYear()
   const month = data.data.expiresDate.getMonth().toString().length === 1 ? "0" + (data.data.expiresDate.getMonth()+1) : data.data.expiresDate.getMonth()+1

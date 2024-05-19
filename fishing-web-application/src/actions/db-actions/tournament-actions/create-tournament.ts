@@ -51,8 +51,6 @@ export async function createTournament(
     };
   }
 
-  console.log(result.data)
-
   if (!session) {
     return {
       errors: {
@@ -145,6 +143,18 @@ export async function createTournament(
           description: "You can only create a tournament for your own associations!",
         },
       };
+  }
+
+  if(result.data.startDate < result.data.deadline){
+    return {
+      errors: {
+        deadline: ["The application deadline cannot be longer than the start time!"],
+        _form: ["The creation failed!"],
+        subtitle: "Incorrect date entered!",
+        status: "error",
+        description: "The application deadline cannot be longer than the start time!",
+      },
+    };
   }
   
 

@@ -40,7 +40,6 @@ export const Actions = <A,>(props: IActionsProps<A>) => {
   const router = useRouter();
   const pathname = usePathname()
 
-  console.log(props.detail?.actionURL)
   
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   return (

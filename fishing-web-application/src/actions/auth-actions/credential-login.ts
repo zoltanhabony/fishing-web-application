@@ -27,7 +27,6 @@ export async function credentialLogin(
     code: formData.get("code"),
   });
 
-  console.log(formData.get("code"));
 
   if (!result.success) {
     return {
@@ -127,7 +126,6 @@ export async function credentialLogin(
         existingUser.id
       );
 
-      console.log(existingConfirmation);
 
       await db.twoFactorToken.delete({
         where: {

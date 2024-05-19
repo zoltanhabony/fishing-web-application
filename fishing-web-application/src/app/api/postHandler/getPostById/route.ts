@@ -47,13 +47,13 @@ export async function GET(request: NextRequest) {
 
       if (!post) {
         return NextResponse.json(
-          { post: emptyPost, message: "Az adatok lekérése sikertelen!" },
+          { post: emptyPost, message: "Data retrieval failed!" },
           { status: 200 }
         );
       }
 
       return NextResponse.json(
-        { post: post, message: "Az adatok lekérése sikeresen megtörtént!" },
+        { post: post, message: "The data has been successfully retrieved!" },
         { status: 200 }
       );
     } catch (e) {}
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
   return NextResponse.json(
     {
       post: emptyPost,
-      message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!",
+      message: "Data retrieval failed: no valid session!",
     },
     { status: 301 }
   );

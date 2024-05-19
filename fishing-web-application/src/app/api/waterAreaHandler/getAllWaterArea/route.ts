@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           areas: waterArea,
-          message: "Az adatok lekérése sikeresen megtörtént!",
+          message: "The data has been successfully retrieved!",
         },
         { status: 200 }
       );
@@ -37,13 +37,13 @@ export async function GET(request: NextRequest) {
     });
 
     return NextResponse.json(
-      { areas: waterArea, message: "Az adatok lekérése sikeresen megtörtént!" },
+      { areas: waterArea, message: "The data has been successfully retrieved!!" },
       { status: 200 }
     );
   }
 
   return NextResponse.json(
-    { message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!" },
+    { message: "Data retrieval failed: no valid session!" },
     { status: 301 }
   );
 }

@@ -15,6 +15,7 @@ export async function getProfileData() {
             firstName:true,
             lastName: true,
             image:true,
+            isTwoFactorEnabled:true,
             member:{
                 select:{
                     logBook:{

@@ -410,7 +410,6 @@ export async function getAllCatches(
   catchList.push(...c);
 }
 
-console.log(catchList.length)
 
 
 const numberOfCatches = await db.catch.aggregate({

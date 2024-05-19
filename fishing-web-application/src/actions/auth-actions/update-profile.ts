@@ -13,6 +13,7 @@ interface SettingsFormState {
     email?: string[];
     firstName?: string[];
     lastName?: string[];
+    isTwoFactorEnabled?:string[]
     _form?: string[];
     subtitle?: string;
     status?: string;
@@ -39,12 +40,14 @@ export const updateProfile = async (
 
   const data = {
     username: formData.get("username"),
+    isTwoFactorEnabled: Boolean(formData.get("isTwoFactorEnabled")),
     email: formData.get("email"),
     password: formData.get("password"),
     confirmPassword: formData.get("confirmPassword"),
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName")
   };
+
 
   const result = schemas.settingsSchema.safeParse(data);
 
@@ -70,7 +73,7 @@ export const updateProfile = async (
   const usernameReserved = await db.user.findUnique({
     where: {
       name: data.username as string,
-
+      
       NOT: {
         id: dbUser.id,
       },
@@ -85,7 +88,6 @@ export const updateProfile = async (
     };
   }
 
-
   await db.user.update({
     where: {
       id: dbUser.id,
@@ -93,7 +95,8 @@ export const updateProfile = async (
     data: {
       name: result.data.username,
       firstName: result.data.firstName,
-      lastName: result.data.lastName
+      lastName: result.data.lastName,
+      isTwoFactorEnabled: result.data.isTwoFactorEnabled
     },
   });
 

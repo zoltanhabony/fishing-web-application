@@ -53,7 +53,6 @@ export const ParticipantCardEditable = ({
 }: ParticipantCardProps) => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  console.log("Item:" + item.id);
 
   const removeParticipant = deleteParticipant.bind(null, tournamentId, item.id);
 

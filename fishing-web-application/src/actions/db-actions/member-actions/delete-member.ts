@@ -13,7 +13,6 @@ export async function deleteMember(id: string) {
     })
 
     if(!member?.logbookId){
-        console.log("Member has no logbook found!")
         return {
             message:"Member has no logbook found!"
         }
@@ -26,7 +25,6 @@ export async function deleteMember(id: string) {
     })
     
     if(!logbook){
-        console.log("No logbook found!")
         return {
             message:"No logbook found!"
         }
@@ -79,7 +77,6 @@ export async function deleteMember(id: string) {
             message:"Authority deleted successfully"
         }
     } catch (error: any) {
-        console.log(error.message)
         return {
             message:error.message
         }

@@ -31,7 +31,6 @@ export default async function InspectPage({
   const dateStart = nowMonth.length === 1 ? nowYear + "-0" + nowMonth + "-" + nowDay :  nowYear + "-" + nowMonth + "-" + nowDay
   const dateEnd = tomMonth.length === 1 ? tomYear + "-0" + tomMonth  + "-" + tomDay :  tomYear + "-" + tomMonth + "-" + tomDay + 1
 
-  console.log("sartDate: " + dateStart + ", endDate: " + dateEnd)
 
   const access = await db.access.findFirst({
     where: {
@@ -65,7 +64,6 @@ export default async function InspectPage({
     },
   });
 
-  console.log(user?.name);
 
   const member = await db.member.findFirst({
     where: {
@@ -91,7 +89,6 @@ export default async function InspectPage({
     },
   });
 
-  console.log(member);
 
   const logbook = await db.logbook.findFirst({
     where: {
@@ -192,7 +189,6 @@ export default async function InspectPage({
     },
   });
 
-  console.log(catchById)
 
   const currentDate = new Date();
   const isFishing =

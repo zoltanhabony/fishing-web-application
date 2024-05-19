@@ -76,7 +76,12 @@ export default async function AuthorityShowPage(props: AuthorityShowPageProps) {
   })
 
   const numberOfMember = await db.member.aggregate({where:{
-    fisheryAuthorityId: authority.id
+    fisheryAuthorityId: authority.id,
+    user:{
+      NOT:{
+        role: "OPERATOR"
+      }
+    }
   }, _count: {id:true}})
 
   const numberOfCatches = await db.catch.aggregate({

@@ -6,7 +6,7 @@ import { deleteMember } from "@/actions/db-actions/member-actions/delete-member"
 import { useSession } from "next-auth/react";
 
 export const columns = [
-  { name: "USER ID", uid: "userId", sortable: false },
+  { name: "MEMBER ID", uid: "memberId", sortable: false },
   { name: "USERNAME", uid: "name", sortable: false },
   { name: "FIRST NAME", uid: "firstName", sortable: false },
   { name: "LAST NAME", uid: "lastName", sortable: false },
@@ -17,7 +17,7 @@ export const columns = [
 ];
 
 export const INITIAL_VISIBLE_COLUMNS = [
-  "userId",
+  "memberId",
   "name",
   "firstName",
   "lastName",
@@ -54,8 +54,8 @@ export const memberRenderCell = (
 ) => {
   const cellValue = members[columnKey as keyof memberTableResponse]
   switch (columnKey) {
-    case "userId":
-      return members.user.id;
+    case "memberId":
+      return members.id;
     case "name":
       return members.user.name;
     case "firstName":
@@ -65,7 +65,7 @@ export const memberRenderCell = (
     case "logbookId":
       return members.logBook?.id;
     case "expiresDate":
-      return members.logBook?.expiresDate.toDateString();
+      return members.logBook?.expiresDate.toLocaleDateString();
     case "fisheryAuthority":
       return members.fisheryAuthority.fisheryAuthorityName;
     case "actions":

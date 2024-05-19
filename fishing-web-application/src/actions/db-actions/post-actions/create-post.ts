@@ -34,7 +34,6 @@ export async function createPost(
   const result = schemas.createPostSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
     return {
       errors: result.error.flatten().fieldErrors,
     };
@@ -133,7 +132,6 @@ export async function createPost(
     },
   });
 
-  console.log(memberships)
 
 
   const isMember = memberships.find((f)=>{

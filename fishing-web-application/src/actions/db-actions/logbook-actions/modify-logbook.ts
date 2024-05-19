@@ -34,7 +34,7 @@ export async function modifyLogbook(
   const result = schemas.modifyLogbookSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
+
     return {
       errors: result.error.flatten().fieldErrors,
     };

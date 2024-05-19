@@ -118,19 +118,19 @@ export async function GET(request: NextRequest) {
     
             if(!markers){
                 return NextResponse.json(
-                    { markers: emptyMarkers, message: "Az adatok lekérése sikertelen!" },
+                    { markers: emptyMarkers, message: "Data retrieval failed!" },
                     { status: 404 }
                   );
             }
     
             return NextResponse.json(
-                { markers: markers, message: "Az adatok lekérése sikeresen megtörtént!" },
+                { markers: markers, message: "The data has been successfully retrieved!" },
                 { status: 200 }
               )
             
         }catch(e){
             return NextResponse.json(
-                { markers: emptyMarkers, message: `Az adatok lekérése sikertelen: ${e}` },
+                { markers: emptyMarkers, message: "Data retrieval failed!" },
                 { status: 200 }
               )
         }
@@ -198,19 +198,19 @@ export async function GET(request: NextRequest) {
 
         if(!markers){
             return NextResponse.json(
-                { markers: emptyMarkers, message: "Az adatok lekérése sikertelen!" },
+                { markers: emptyMarkers, message: "Data retrieval failed!" },
                 { status: 404 }
               );
         }
 
         return NextResponse.json(
-            { markers: markers, message: "Az adatok lekérése sikeresen megtörtént!" },
+            { markers: markers, message: "The data has been successfully retrieved!" },
             { status: 200 }
           )
         
     }catch(e){
         return NextResponse.json(
-            { markers: emptyMarkers, message: `Az adatok lekérése sikertelen: ${e}` },
+            { markers: emptyMarkers, message: "Data retrieval failed: no valid session!" },
             { status: 200 }
           )
     }
@@ -219,7 +219,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json(
-    { markerTypes: emptyMarkers, message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!" },
+    { markerTypes: emptyMarkers, message: "Data retrieval failed: no valid session!" },
     { status: 301 }
   );
 }

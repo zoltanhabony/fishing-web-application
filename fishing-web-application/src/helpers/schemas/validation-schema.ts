@@ -46,8 +46,9 @@ export const newPasswordSchema = z.object({
 export const settingsSchema = z.object({
     username: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets')),
     firstName: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets')),
-    lastName: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets'))
-})
+    lastName: z.optional(z.string().min(1, {message:"The username is required"}).min(3, {message:"The username must be contain three caracther and starts with letter"}).refine((value) => /^[a-zA-Z\u0080-\uFFFF]+/.test(value), 'Name should contain only alphabets')),
+    isTwoFactorEnabled: z.boolean()
+  })
 
 export const memberSchema = z.object({
   memberId:z.string().min(1, {message:"The member id is required"}),

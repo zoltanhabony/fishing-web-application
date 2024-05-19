@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import db from "@/lib/db";
 import { auth } from "@/auth";
-import { Decimal } from "@prisma/client/runtime/library";
 
 
 
@@ -28,13 +27,13 @@ export async function GET(request: NextRequest) {
 
         if(!markerTypes){
             return NextResponse.json(
-                { markerTypes: emptyMarkerType, message: "Az adatok lekérése sikertelen!" },
+                { markerTypes: emptyMarkerType, message: "Data retrieval failed!" },
                 { status: 404 }
               );
         }
 
         return NextResponse.json(
-            { markerTypes: markerTypes, message: "Az adatok lekérése sikeresen megtörtént!" },
+            { markerTypes: markerTypes, message: "The data has been successfully retrieved!" },
             { status: 200 }
           )
         
@@ -44,7 +43,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json(
-    { markerTypes: emptyMarkerType, message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!" },
+    { markerTypes: emptyMarkerType, message: "Data retrieval failed: no valid session!" },
     { status: 301 }
   );
 }

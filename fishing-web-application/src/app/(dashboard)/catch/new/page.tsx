@@ -48,9 +48,6 @@ export default async function CreateLogbookPage() {
     },
   });
 
-  console.log(!access?.accessToFishing)
-  console.log(!access?.accessToLogbook)
-
   if(!access?.accessToFishing || !access?.accessToLogbook){
     return (
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">

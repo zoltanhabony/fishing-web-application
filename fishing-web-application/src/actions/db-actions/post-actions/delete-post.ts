@@ -28,17 +28,6 @@ export async function deletePost(id: string) {
     };
   }
 
-  if (session.user.role !== "OPERATOR") {
-    return {
-      errors: {
-        _form: ["Authorization failed!"],
-        subtitle: "No access to perform the operation",
-        status: "error",
-        description: "You do not have access to create map!",
-      },
-    };
-  }
-
   const post = await db.post.findUnique({
     where: {
       id: id,
@@ -77,26 +66,24 @@ export async function deletePost(id: string) {
     };
   }
 
-  if(post.memberId !== member.id){
+  if (session.user.role !== "OPERATOR" && post.memberId !== member.id) {
     return {
-        errors: {
-          _form: ["The deletion failed!"],
-          subtitle: "No permission",
-          status: "error",
-          description: "You are not allowed to edit this post because it does not belong to you!",
-        },
-      };
+      errors: {
+        _form: ["Authorization failed!"],
+        subtitle: "No access to perform the operation",
+        status: "error",
+        description: "You do not have access to delete post!",
+      },
+    };
   }
 
   try {
-    revalidatePath(`/post`);
-
     await db.post.delete({
       where:{
         id:post.id
       }
-    });
-
+      });
+    revalidatePath(`/post`);
     return {
       errors: {
         _form: ["The post deleted successfully"],
@@ -105,6 +92,7 @@ export async function deletePost(id: string) {
         description: "The post deleted successfully",
       },
     };
+    
   } catch (error: any) {
     return {
       errors: {

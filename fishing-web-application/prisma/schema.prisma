@@ -101,7 +101,7 @@ model Member {
   user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
   logBook          Logbook?         @relation(fields: [logbookId], references: [id], onDelete: Cascade)
-  Map              Map[]
+  Map              Map[] 
   Marker           Marker[]
   post             Post[]
   participant      Participant[]
@@ -238,8 +238,8 @@ model Map {
   memberId           String
   fisheryAuthorityId String  @unique
 
-  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
-  member           Member           @relation(fields: [memberId], references: [id])
+  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id], onDelete: Cascade)
+  member           Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
   Marker           Marker[]
 }
 
@@ -254,9 +254,9 @@ model Marker {
   markerTypeId String
   createdAt    DateTime @default(now()) @db.Date
 
-  map        Map        @relation(fields: [mapId], references: [id])
-  member     Member     @relation(fields: [memberId], references: [id])
-  markerType MarkerType @relation(fields: [markerTypeId], references: [id])
+  map        Map        @relation(fields: [mapId], references: [id], onDelete: Cascade)
+  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  markerType MarkerType @relation(fields: [markerTypeId], references: [id], onDelete: Cascade)
 }
 
 model MarkerType {
@@ -275,8 +275,8 @@ model Post {
   memberId           String
   fisheryAuthorityId String
 
-  member           Member           @relation(fields: [memberId], references: [id])
-  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
+  member           Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id], onDelete: Cascade)
 }
 
 //Tournament
@@ -293,9 +293,9 @@ model Tournament {
   memberId              String
   fisheryAuthorityId    String
 
-  fish             Fish?            @relation(fields: [fishId], references: [id])
-  member           Member           @relation(fields: [memberId], references: [id])
-  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id])
+  fish             Fish?            @relation(fields: [fishId], references: [id], onDelete: Cascade)
+  member           Member           @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  fisheryAuthority FisheryAuthority @relation(fields: [fisheryAuthorityId], references: [id], onDelete: Cascade)
   participant      Participant[]
 }
 
@@ -305,8 +305,8 @@ model Participant {
   memberId     String
   rank         Int?
 
-  member     Member     @relation(fields: [memberId], references: [id])
-  tournament Tournament @relation(fields: [tournamentId], references: [id])
+  member     Member     @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  tournament Tournament @relation(fields: [tournamentId], references: [id], onDelete: Cascade)
 
   @@unique([memberId, tournamentId])
 }
