@@ -14,7 +14,6 @@ export default async function ProfilePage() {
 
   const profileData = await getProfileData() 
 
-  console.log(profileData)
 
   return (
     <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">

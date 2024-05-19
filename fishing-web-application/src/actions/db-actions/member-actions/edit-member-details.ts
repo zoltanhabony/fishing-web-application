@@ -8,6 +8,7 @@ import { User } from "@nextui-org/react";
 import { generateTwoFactorToken } from "@/lib/tokens";
 import { sendTwoFactorTokenEmail } from "@/utils/mail";
 import { revalidatePath } from "next/cache";
+import { auth } from "@/auth";
 
 interface SettingsFormState {
   errors: {
@@ -28,6 +29,20 @@ export const updateMemberDetails = async (
   formSate: SettingsFormState,
   formData: FormData
 ): Promise<SettingsFormState> => {
+
+  const session = await auth()
+
+  if(!session){
+    return {
+      errors: {
+        _form: ["Authorization failed!"],
+        subtitle: "There is no valid session",
+        status: "error",
+        description: "There is no valid session! Sign in again! ",
+      },
+    };
+  }
+
   const data = {
     memberId: formData.get("memberId"),
     username: formData.get("username"),
@@ -40,7 +55,7 @@ export const updateMemberDetails = async (
   const result = schemas.memberSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error.flatten().fieldErrors);
+
     return {
       errors: result.error.flatten().fieldErrors,
     };
@@ -53,11 +68,13 @@ export const updateMemberDetails = async (
       user:{
         select:{
           id:true,
-          email:true
+          email:true,
+          role:true,
         }
       }
     },
   });
+
   if (!member) {
     return {
       errors: {
@@ -65,6 +82,17 @@ export const updateMemberDetails = async (
         subtitle: "Failure to save the data!",
         status: "error",
         description: "User cannot be found!",
+      },
+    };
+  }
+
+  if(member.user.role === session.user.role){
+    return {
+      errors: {
+        _form: ["Failed data modification!"],
+        subtitle: "Failure to save the data!",
+        status: "error",
+        description: "You are not allowed to edit this member!",
       },
     };
   }
@@ -87,7 +115,7 @@ export const updateMemberDetails = async (
       },
     };
   }
-  console.log(result.data.role);
+
   if (!((result.data.role as string) in UserRole)) {
     return {
       errors: {

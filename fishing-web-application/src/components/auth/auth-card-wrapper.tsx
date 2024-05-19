@@ -35,6 +35,7 @@ export const AuthCardWrapper = ({
         </span>
       </div>
        <Social/>
+       <p className="text-sm">{"(for users only)"}</p>
       </>
       : ""}
     </>

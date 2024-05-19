@@ -160,6 +160,27 @@ type userAccessResponse = {
   } | null;
 };
 
+type userCatchType = {
+  catches: {
+    id: string;
+    fish: {
+      id: string;
+      fishName: string;
+      fishImageURL: string;
+    };
+    waterArea: {
+      waterAreaName: string;
+    };
+    createdAt: Date;
+    CatchDetails: {
+      value: Decimal;
+      unit: {
+        unitAcronyms: string;
+      };
+    }[];
+  }[];
+};
+
 export function useWaterAreas(q: string) {
   return useSWR<waterAreaResponse>(
     `/api/waterAreaHandler/getAllWaterArea?name=${q}`,
@@ -295,6 +316,24 @@ export function usePostById(q: string) {
 
 export function usePostByIdForEdit(q: string) {
   return useSWR<any>(`/api/postHandler/getPostByIdForEdit?id=${q}`, fetcher, {
+    onErrorRetry: (error) => {
+      // Never retry on 404.
+      if (error.status === 404) return;
+    },
+  });
+}
+
+export function useCatcByUserId() {
+  return useSWR<userCatchType>("/api/catchHandler/catchByUserId", fetcher, {
+    onErrorRetry: (error) => {
+      // Never retry on 404.
+      if (error.status === 404) return;
+    },
+  });
+}
+
+export function useCatcByAuthority(q:string) {
+  return useSWR<userCatchType>(`/api/catchHandler/catchByAuthority?authority=${q}`, fetcher, {
     onErrorRetry: (error) => {
       // Never retry on 404.
       if (error.status === 404) return;

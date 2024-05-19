@@ -36,7 +36,6 @@ export async function editPost(
   const result = schemas.editPostSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
     return {
       errors: result.error.flatten().fieldErrors,
     };
@@ -88,7 +87,7 @@ export async function editPost(
     }
   }
 
-  console.log(currentAuthority)
+
 
   if(!currentAuthority){
     return {

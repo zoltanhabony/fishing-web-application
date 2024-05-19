@@ -3,10 +3,8 @@
 import { auth } from "@/auth";
 import * as schemas from "@/helpers/schemas/tournament-schema";
 import db from "@/lib/db";
-import { Decimal } from "@prisma/client/runtime/library";
-import { table } from "console";
 import { revalidatePath } from "next/cache";
-import { json } from "stream/consumers";
+
 
 interface ChangeRankFormState {
   errors?: {
@@ -47,7 +45,7 @@ export async function changeRank(
   const result = schemas.changeRankSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
+   
     return {
       errors: result.error.flatten().fieldErrors,
     };

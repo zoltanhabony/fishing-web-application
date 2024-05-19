@@ -1,5 +1,5 @@
 "use client";
-import { Button, Input } from "@nextui-org/react";
+import { Button, Checkbox, cn, Input } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import * as actions from "@/actions/index";
 import { useFormState } from "react-dom";
@@ -18,6 +18,7 @@ interface UpdateProfileFormPros {
     firstName: string | null;
     lastName: string | null;
     email: string | null;
+    isTwoFactorEnabled: boolean;
 } | null
 }
 
@@ -84,6 +85,33 @@ export const UpdateProfileForm = ({profileData}: UpdateProfileFormPros) => {
             }
           />
         </div>
+        <Checkbox
+            defaultSelected={
+              profileData?.isTwoFactorEnabled ? profileData.isTwoFactorEnabled : undefined
+            }
+            isReadOnly={isReadonly}
+            name="isTwoFactorEnabled"
+            value={"isTwoFactorEnabled"}
+            isInvalid={!!formState.errors.isTwoFactorEnabled}
+            classNames={{
+              base: cn(
+                "inline-flex w-full max-w-md bg-content1  mt-1 mb-1 ml-0",
+                "items-center justify-start",
+                "cursor-pointer rounded-xl hover:border-zinc-500",
+                "data-[selected=true]:border-primary"
+              ),
+              label: "w-full",
+            }}
+          >
+            <div>
+              <h5 className="text-zinc-300 text-bold text-md">
+                Two-Factor Authentication!
+              </h5>
+              <p className="text-xs text-zinc-400">
+              Activate two-factor authentication to strengthen the protection of your account!
+              </p>
+            </div>
+          </Checkbox>
         {formState.errors?._form ? (
           <InformationCard
             title={formState.errors?._form?.at(0)}

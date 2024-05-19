@@ -1,8 +1,14 @@
+import { FormSections } from "@/components/form/form-section";
+
 export default function CatchNotFound() {
-    return (<div>
-        <h1 className="text-xl bold">
-            Sorry, but we couldnt find that particular catch
-        </h1>
-    </div>)
+    return (
+        <div className="space-y-1 p-5">
+          <h1 className="text-[30px]">Catch</h1>
+          <FormSections
+            title="Not Found"
+            description="The catch cannot be found"
+          />
+        </div>
+      );
 }
 

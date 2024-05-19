@@ -48,8 +48,6 @@ export async function getAllTournament(page: string, search: string) {
                   },
                 },
               });
-              
-              console.log(currentMember)
               return post.memberId === currentMember?.memberId;
             },
           },

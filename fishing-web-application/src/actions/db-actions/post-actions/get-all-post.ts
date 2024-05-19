@@ -2,8 +2,7 @@
 
 import { auth } from "@/auth";
 import db from "@/lib/db";
-import { UserRole } from "@prisma/client";
-import { Decimal } from "@prisma/client/runtime/library";
+
 
 
 type post = {

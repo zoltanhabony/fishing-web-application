@@ -73,13 +73,10 @@ export const updateUserPermissions = async (
   const result = schemas.userPermissonSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error.flatten().fieldErrors);
     return {
       errors: result.error.flatten().fieldErrors,
     };
   }
-
-  console.log("ez az ertek: " + result.data.accessToLogbook);
 
   const member = await db.member.findUnique({
     where: { id: result.data.memberId },

@@ -88,13 +88,13 @@ export async function GET(request: NextRequest) {
 
         if(!map){
             return NextResponse.json(
-                { map: emptyMap, message: "Az adatok lekérése sikertelen!" },
+                { map: emptyMap, message: "Data retrieval failed!" },
                 { status: 404 }
               );
         }
 
         return NextResponse.json(
-            { map: map, message: "Az adatok lekérése sikeresen megtörtént!" },
+            { map: map, message: "The data has been successfully retrieved!" },
             { status: 200 }
           )
         
@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
   }
 
   return NextResponse.json(
-    { message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!" },
+    { message: "Data retrieval failed: no valid session!" },
     { status: 301 }
   );
 }

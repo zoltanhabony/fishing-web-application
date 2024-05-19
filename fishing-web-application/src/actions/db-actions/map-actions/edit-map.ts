@@ -37,7 +37,7 @@ export async function editMap(
   const result = schemas.editMapSchema.safeParse(data);
 
   if (!result.success) {
-    console.log(result.error);
+   
     return {
       errors: result.error.flatten().fieldErrors,
     };

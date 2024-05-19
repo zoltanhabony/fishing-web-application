@@ -64,7 +64,7 @@ export const MarkerPopup = ({
           return;
         }
         setIsMounted(true)
-        console.log("finished")
+    
         revalidateMarker()
         
     }, [isMounted, isPending, revalidateMarker]);
@@ -101,7 +101,6 @@ export const MarkerPopup = ({
                           aria-label="Delete marker"
                           type="submit"
                           onPress={onClose}
-                          onClick={()=>console.log("Clicked in: " + markerId)}
                         >
                           {"Delete"}
                         </Button>

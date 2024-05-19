@@ -193,7 +193,7 @@ export default function StatisticsPage() {
                 })}
               </Select>
 
-              {session.data.user.role === "OPERATOR" ? (
+              {session.data.user.role === "OPERATOR" && authorities.data ? (
                 <Select
                   defaultSelectedKeys={[authorityStat.data.authorityName]}
                   label="Select authority"

@@ -122,15 +122,14 @@ export default async function EditLogbookPage(props: AuthorityEditPageProps) {
             <EditTournamentForm
               props={{
                 fisheryAuthorityName:
-                  tournament.fisheryAuthority.fisheryAuthorityName,
+                tournament.fisheryAuthority.fisheryAuthorityName,
                 tournamentName: tournament.tournamentName,
                 tournamentType: String(tournament.tournamentType),
                 tournamentDescription: tournament.tournamentDescription,
                 maxParticipants: tournament.maxParticipants,
                 startDate: tournament.startDate,
                 deadline: tournament.deadline,
-                fishId:
-                  tournament.fish?.id === "" ? tournament.fish?.id : undefined,
+                fishId:tournament.fish?.id,
                 id: tournament.id,
                 isFinished: tournament.isFinished,
               }}

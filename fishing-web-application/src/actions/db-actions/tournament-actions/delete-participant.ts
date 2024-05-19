@@ -1,12 +1,10 @@
 "use server";
 
 import { auth } from "@/auth";
-import * as schemas from "@/helpers/schemas/tournament-schema";
+
 import db from "@/lib/db";
-import { Decimal } from "@prisma/client/runtime/library";
-import { table } from "console";
+
 import { revalidatePath } from "next/cache";
-import { json } from "stream/consumers"
 
 interface CreatePostFormState {
   errors?: {
@@ -41,8 +39,6 @@ export async function deleteParticipant(tournamentId:string, participantId:strin
       },
     };
   }
-
-  console.log(tournamentId)
 
   const tournament = await db.tournament.findUnique({
     where:{
@@ -145,7 +141,6 @@ export async function deleteParticipant(tournamentId:string, participantId:strin
 
 
   try {
-    console.log("ok")
     
     await db.participant.delete({
         where:{

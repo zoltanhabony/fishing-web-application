@@ -45,11 +45,11 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Outer run");
+;
     if (!map.isLoading && map.data) {
       setCenter([Number(map.data.map?.lat), Number(map.data.map?.long)]);
       setZoom(Number(map.data.map?.zoom));
-      console.log("changed");
+  
     }
   }, [map.data, map.isLoading]);
 

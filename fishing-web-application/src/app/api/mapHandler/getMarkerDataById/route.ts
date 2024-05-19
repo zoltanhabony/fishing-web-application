@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
 
         if(!marker){
             return NextResponse.json(
-                { marker: emptyMarker, message: `Az adatok lekérése sikertelen` },
+                { marker: emptyMarker, message: `Data retrieval failed!` },
                 { status: 200 }
               )
         }
@@ -94,19 +94,19 @@ export async function GET(request: NextRequest) {
 
           if(!isMember && !isOperator){
             return NextResponse.json(
-                { marker: emptyMarker, message: `Az adatok lekérése sikertelen` },
+                { marker: emptyMarker, message: `Data retrieval failed!` },
                 { status: 200 }
               )
           }
 
             return NextResponse.json(
-                { marker: marker, message: "Az adatok lekérése sikeresen megtörtént!" },
+                { marker: marker, message: "The data has been successfully retrieved!" },
                 { status: 200 }
               )
             
         }catch(e){
             return NextResponse.json(
-                { marker: emptyMarker, message: `Az adatok lekérése sikertelen: ${e}` },
+                { marker: emptyMarker, message: `Data retrieval failed!` },
                 { status: 200 }
               )
         }
@@ -115,7 +115,7 @@ export async function GET(request: NextRequest) {
 
 
   return NextResponse.json(
-    { marker: emptyMarker, message: "Az adatok lekérése sikertelen: Nincs érvényes munkamenet!" },
+    { marker: emptyMarker, message: "Data retrieval failed: no valid session!" },
     { status: 301 }
   );
 

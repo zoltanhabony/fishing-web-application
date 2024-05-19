@@ -167,10 +167,21 @@ export async function editTournament(
         },
       };
   }
-  
+
+  if(result.data.startDate < result.data.deadline){
+    return {
+      errors: {
+        deadline: ["The application deadline cannot be longer than the start time!"],
+        _form: ["The creation failed!"],
+        subtitle: "Incorrect date entered!",
+        status: "error",
+        description: "The application deadline cannot be longer than the start time!",
+      },
+    };
+  }
 
   const fish = await db.fish.findUnique({where:{
-    id: result.data.fishId?.toString()
+    id: result.data.fishId ?  result.data.fishId : ""
   }})
 
   let fishType: string | null | undefined = fish?.id
@@ -178,13 +189,9 @@ export async function editTournament(
   if(!fish){
     fishType = null
   }
-
-  console.log(fishType)
-
   try {
-    revalidatePath(`/tournament`);
-
     await db.tournament.update({
+      
         where:{
             id: tournament.id
         },
@@ -200,9 +207,10 @@ export async function editTournament(
             memberId: member.id,
             isFinished: result.data.isFinished
         }
+        
     })
 
-
+    revalidatePath(`/tournament`);
     return {
       errors: {
         _form: ["Successful data saving"],

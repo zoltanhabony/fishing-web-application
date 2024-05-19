@@ -43,7 +43,6 @@ export async function  createAuthority(
   const result = schemas.createAuthoritySchema.safeParse(data);
   
   if (!result.success) {
-    console.log(result.error)
     return {
       errors: result.error.flatten().fieldErrors,
     };

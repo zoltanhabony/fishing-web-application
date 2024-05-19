@@ -65,7 +65,6 @@ export default function CreateMarkerPage(props: MarkerCreatePageProps) {
     );
   }
 
-  console.log(access.data?.access?.accessToMarker)
   if(!access.data?.access || !access.data.access.accessToMarker){
     return (
       <div className="w-full">

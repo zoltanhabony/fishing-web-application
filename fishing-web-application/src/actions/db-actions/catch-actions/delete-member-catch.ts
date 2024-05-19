@@ -1,8 +1,31 @@
 "use server"
+import { auth } from "@/auth";
 import db from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export async function deleteMemberCatch(id: string) {
+
+    const session = await auth()
+
+    if(!session) {
+        return {
+            message:"No session"
+        }
+    }
+
+    const access = await db.access.findFirst({
+        where:{
+            user:{
+                email: session.user.email
+            }
+        }
+    })
+
+    if(session.user.role !== "OPERATOR" && (session.user.role !== "INSPECTOR" || !access?.accessToCatches)){ 
+        return {
+            message:"No access"
+        }
+    }
     
     const catchById = await db.catch.findUnique({
         where:{
@@ -11,7 +34,6 @@ export async function deleteMemberCatch(id: string) {
     })
 
     if(!catchById){
-        console.log("No catch found!")
         return {
             message:"No catch found!"
         }
@@ -25,14 +47,14 @@ export async function deleteMemberCatch(id: string) {
                     id: catchById.id
             }
         })
-       
+        
 
         revalidatePath("/catch")
         return {
             message:"Catch deleted successfully"
         }
     } catch (error: any) {
-        console.log(error.message)
+
         return {
             message:error.message
         }
