@@ -48,8 +48,22 @@ export default async function AuthorityPage({
   if (session.user.role === "OPERATOR") {
     return (
       <div className="p-5 h-full">
-        <h1 className="text-[30px] pb-5">Authorities</h1>
-        <h2 className="text-[20px] pb-5">Authorities Table</h2>
+        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
+          <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+            <h1 className="text-[30px]">Authorities</h1>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-1">
+            <FormSections
+              title={"Authorities Table"}
+              description={
+                "The table shows the associations created. Association data can be edited and deleted!"
+              }
+            />
+            <br />
+            </div>
+          </CardBody>
+        </Card>
         <AuthorityTable
           authorities={authorities.authorities}
           numberOfAuthorities={authorities.numberOfAuthorities._count.id}

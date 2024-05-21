@@ -1,11 +1,12 @@
 "use client";
 import { FormSections } from "@/components/form/form-section";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Link } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useOwnAuthorities, useUserAccess } from "@/services/queries";
 import { NewPostForm } from "@/components/form/new-post-form";
+import { BackIcon } from "@/icons/back-icon";
 
 const MdEditor = dynamic(() => import("@uiw/react-md-editor"), { ssr: false });
 
@@ -69,6 +70,10 @@ export default function NewPostPage() {
       <div className="p-5 h-full">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
           <CardHeader className="mobile:block flex flex-col">
+          <Link href={"/post"} className="pb-3 text-sm flex">
+            <BackIcon />
+            <span className="pl-3">{"back to list of posts"}</span>
+          </Link>
             <h1 className="text-[30px]">New Post</h1>
           </CardHeader>
           <CardBody>

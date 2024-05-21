@@ -6,6 +6,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Link,
   useDisclosure,
 } from "@nextui-org/react";
 import { useEffect, useMemo, useState } from "react";
@@ -13,6 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useMapById, useMarkersByMap, useUserAccess } from "@/services/queries";
 import { useRouter } from "next/navigation";
+import { BackIcon } from "@/icons/back-icon";
 
 interface MarkerCreatePageProps {
   params: {
@@ -23,13 +25,12 @@ interface MarkerCreatePageProps {
 export default function ViewMapPage(props: MarkerCreatePageProps) {
   const map = useMapById(props.params.id);
   const markers = useMarkersByMap(props.params.id);
-  const access = useUserAccess()
+  const access = useUserAccess();
 
   const revalidateMarker = () => {
     markers.mutate();
     map.mutate();
   };
-
 
   const Map = useMemo(
     () =>
@@ -45,34 +46,32 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
   const router = useRouter();
 
   useEffect(() => {
-;
     if (!map.isLoading && map.data) {
       setCenter([Number(map.data.map?.lat), Number(map.data.map?.long)]);
       setZoom(Number(map.data.map?.zoom));
-  
     }
   }, [map.data, map.isLoading]);
 
   if (map.isLoading || markers.isLoading || access.isLoading) {
     return (
       <div className="p-5 h-full overflow-hidden block">
-      <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
-        <CardHeader className="mobile:block flex flex-col">
-          <h1 className="text-[30px]">View Map</h1>
-        </CardHeader>
-        <CardBody>
-          <div className="space-y-1">
-            <FormSections
-              title={"Find your way around the map"}
-              description={
-                "Use the form and map to create a map of your association. To set up, you need the centre of the lake and the name of the association to which the map belongs"
-              }
-            />
-          </div>
-          <p>Map is loading...</p>
-        </CardBody>
+        <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
+          <CardHeader className="mobile:block flex flex-col">
+            <h1 className="text-[30px]">View Map</h1>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-1">
+              <FormSections
+                title={"Find your way around the map"}
+                description={
+                  "Use the form and map to create a map of your association. To set up, you need the centre of the lake and the name of the association to which the map belongs"
+                }
+              />
+            </div>
+            <p>Map is loading...</p>
+          </CardBody>
         </Card>
-        </div>
+      </div>
     );
   }
 
@@ -80,6 +79,10 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
     <div className="p-5 h-full overflow-hidden block">
       <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col">
+          <Link href={"/map"} className="pb-3 text-sm flex">
+            <BackIcon />
+            <span className="pl-3">{"back to list of maps"}</span>
+          </Link>
           <h1 className="text-[30px]">View Map</h1>
           <h2 className="text-primary font-bold">
             {map.data
@@ -97,12 +100,22 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
             />
           </div>
           <br />
-          {access.data?.access ? (access.data.access.accessToMarker ? <Button
-            color="primary"
-            onClick={() => router.push(`/map/${props.params.id}/marker/new`)}
-          >
-            Create Marker
-          </Button> : ""): ""}
+          {access.data?.access ? (
+            access.data.access.accessToMarker ? (
+              <Button
+                color="primary"
+                onClick={() =>
+                  router.push(`/map/${props.params.id}/marker/new`)
+                }
+              >
+                Create Marker
+              </Button>
+            ) : (
+              ""
+            )
+          ) : (
+            ""
+          )}
         </CardBody>
       </Card>
       <Map

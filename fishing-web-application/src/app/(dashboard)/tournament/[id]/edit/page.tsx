@@ -2,8 +2,9 @@ import { auth } from "@/auth";
 import { ReorderParticipantCards } from "@/components/card/reorder-participant-cards";
 import { EditTournamentForm } from "@/components/form/edit-tournament-form";
 import { FormSections } from "@/components/form/form-section";
+import { BackIcon } from "@/icons/back-icon";
 import db from "@/lib/db";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Link } from "@nextui-org/react";
 
 interface AuthorityEditPageProps {
   params: {
@@ -39,6 +40,17 @@ export default async function EditLogbookPage(props: AuthorityEditPageProps) {
       },
     },
   });
+
+  const isOwner = await db.tournament.findUnique({
+    where:{
+      id: props.params.id,
+      member:{
+        user:{
+          email: session?.user.email
+        }
+      }
+    }
+  })
 
   const participants = await db.participant.findMany({
     where: {
@@ -88,7 +100,7 @@ export default async function EditLogbookPage(props: AuthorityEditPageProps) {
     );
   }
 
-  if (session.user.role !== "OPERATOR") {
+  if (session.user.role !== "OPERATOR" || !isOwner) {
     return (
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
@@ -110,6 +122,10 @@ export default async function EditLogbookPage(props: AuthorityEditPageProps) {
     <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+        <Link href={"/tournament"} className="pb-3 text-sm flex">
+            <BackIcon />
+            <span className="pl-3">{"back to list of tournaments"}</span>
+          </Link>
           <h1 className="text-[30px]">Edit Tournament</h1>
           <h2 className="text-primary font-bold text-sm">{tournament?.id}</h2>
         </CardHeader>

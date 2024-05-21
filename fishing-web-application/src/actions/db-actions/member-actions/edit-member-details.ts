@@ -97,6 +97,8 @@ export const updateMemberDetails = async (
     };
   }
 
+  
+
   const usernameReserved = await db.member.findFirst({
     where: {
       NOT: {
@@ -160,6 +162,17 @@ export const updateMemberDetails = async (
   if (member.user.email !== result.data.email) {
     const twoFactorToken = await generateTwoFactorToken(result.data.email);
     await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
+  }
+
+  if(session.user.role === "INSPECTOR" &&  result.data.role === "INSPECTOR"){
+    return {
+      errors: {
+        _form: ["Failed data modification!"],
+        subtitle: "Failure to save the data!",
+        status: "error",
+        description: "You are not allowed to add inspector role!",
+      },
+    };
   }
 
   try {

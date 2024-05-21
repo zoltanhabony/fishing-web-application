@@ -1,8 +1,9 @@
 import db from "@/lib/db";
 import notFound from "./not-found";
-import { Card, CardBody, CardHeader, Snippet } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Link, Snippet } from "@nextui-org/react";
 import { FormSections } from "@/components/form/form-section";
 import { auth } from "@/auth";
+import { BackIcon } from "@/icons/back-icon";
 
 interface AuthorityShowPageProps {
   params: {
@@ -120,7 +121,14 @@ export default async function AuthorityShowPage(props: AuthorityShowPageProps) {
         <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
           <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
             <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-              <h1 className="text-[30px]">{authority.fisheryAuthorityName}</h1>
+            <Link href={"/authority"} className="pb-3 text-sm flex">
+              <BackIcon />
+              <span className="pl-3">{"back to list of authorities"}</span>
+            </Link>
+              <h1 className="text-[30px]">View Authority</h1>
+            <h3 className="text-primary">
+              {authority.fisheryAuthorityName}
+            </h3>
             </CardHeader>
             <CardBody>
               <div className="space-y-1">

@@ -60,7 +60,7 @@ export const authorityRenderCell = (
       const removeAuthority = removefisheryAuthorities.bind(null, authority.fisheryAuthority.id)
       const id = authority.fisheryAuthority.id 
       return (
-        <Actions delete={{tooltip: "Delete", action: removeAuthority, type:"submit", deleteTitle:"Delete Authority", deleteMessage:""}} detail={{tooltip: "Detail", type:"button", id:id}} edit={{tooltip: "Edit", type:"button", id:id}}/>
+        <Actions delete={{tooltip: "Delete", action: removeAuthority, type:"submit", deleteTitle:"Delete Authority", deleteMessage:"Deletion of associations is a fatal operation, it cannot be restored. Before deleting, make sure that you have informed your users and transferred their logbook's to another association. All catch data and statistics will be lost, maps and tournaments will be deleted."}} detail={{tooltip: "Detail", type:"button", id:id}} edit={{tooltip: "Edit", type:"button", id:id}}/>
       );
     default:
       return cellValue;
