@@ -131,7 +131,7 @@ export const CreateAuthorityForm = () => {
             isRequired={true}
             isInvalid={!!formState.errors?.cityName}
             errorMessage={formState.errors?.cityName?.at(0)}
-            placeholder="Enter the water area name"
+            placeholder="Enter the city name"
             onInputChange={onCityInputChange}
             onKeyDown={(e: any) => {
               e.continuePropagation();
@@ -190,7 +190,7 @@ export const CreateAuthorityForm = () => {
             label="Floor number if exist"
             type="number"
             variant="bordered"
-            placeholder="Enter the street number"
+            placeholder="Enter the floor number"
             isInvalid={!!formState.errors?.floor}
             errorMessage={formState.errors?.floor?.at(0)}
             endContent={
@@ -203,7 +203,7 @@ export const CreateAuthorityForm = () => {
             label="Door number if exist"
             type="number"
             variant="bordered"
-            placeholder="Enter the street number"
+            placeholder="Enter the door number"
             isInvalid={!!formState.errors?.door}
             errorMessage={formState.errors?.door?.at(0)}
             endContent={

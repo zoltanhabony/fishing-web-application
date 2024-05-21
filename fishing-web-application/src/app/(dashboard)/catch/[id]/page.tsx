@@ -5,6 +5,7 @@ import { FormSections } from "@/components/form/form-section";
 import { FishAvatar } from "@/components/card/fish-card";
 import { BackIcon } from "@/icons/back-icon";
 import { auth } from "@/auth";
+import { UserRole } from "@prisma/client";
 
 interface LogbookShowPageProps {
   params: {
@@ -127,7 +128,7 @@ export default async function MemberShowPage(props: LogbookShowPageProps) {
       <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
           <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-            {session.user.role === "USER" ? <Link href={"/logbook"} className="pb-3 text-sm flex">
+            {session.user.role === UserRole.USER || isOwnFish ? <Link href={"/logbook"} className="pb-3 text-sm flex">
               <BackIcon />
               <span className="pl-3">{"back to list of catches"}</span>
             </Link>: <Link href={"/catch"} className="pb-3 text-sm flex">

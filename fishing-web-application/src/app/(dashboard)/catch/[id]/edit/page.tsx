@@ -121,16 +121,39 @@ export default async function CatchEditPage(props: AuthorityEditPageProps) {
       }
     }
   })
+  
+  if(session.user.role === "USER" && (!isOwnFish || !access?.accessToLogbook || !access.accessToFishing || catchById.isStored === true)){
+   return (
+    <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent px-3">
+    <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+      <h1 className="text-[30px]">Edit Catch</h1>
+    </CardHeader>
+    <CardBody>
+      <div className="space-y-1">
+        <FormSections
+          title={"Access denide!"}
+          description={
+            "You are not allowed to edit this catch"
+          }
+        />
+      </div>
+    </CardBody>
+  </Card>
+   )
+  }
 
   if(isOwnFish && access?.accessToLogbook && access.accessToFishing || (session.user.role === "OPERATOR" && isInWaterArea) || (isInWaterArea && !isOwnFish && session?.user.role === "INSPECTOR" && access?.accessToCatches)){
     return (
       <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
           <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-          <Link href={"/catch"} className="pb-3 text-sm flex">
+          {session.user.role === UserRole.USER || isOwnFish ? <Link href={"/logbook"} className="pb-3 text-sm flex">
               <BackIcon />
               <span className="pl-3">{"back to list of catches"}</span>
-            </Link>
+            </Link>: <Link href={"/catch"} className="pb-3 text-sm flex">
+              <BackIcon />
+              <span className="pl-3">{"back to list of catches"}</span>
+            </Link>}
             {session?.user.role === UserRole.USER ? <h1 className="text-[30px]">Edit Catch</h1> : <h1 className="text-[30px]">Edit User Catch</h1>}
             <h3 className="text-primary">
               {catchById.logbook.member?.user.name + "'s catch"}

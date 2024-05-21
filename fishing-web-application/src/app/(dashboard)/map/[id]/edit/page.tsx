@@ -1,7 +1,7 @@
 "use client";
 
 import { FormSections } from "@/components/form/form-section";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Link } from "@nextui-org/react";
 import { useEffect, useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
@@ -9,6 +9,7 @@ import { useMapById } from "@/services/queries";
 import { EditMapForm } from "@/components/form/edit-map-form";
 import { useSession } from "next-auth/react";
 import { UserRole } from "@prisma/client";
+import { BackIcon } from "@/icons/back-icon";
 
 interface MarkerCreatePageProps {
   params: {
@@ -31,7 +32,7 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
   const [center, setCenter] = useState([47.497912, 19.040235]);
   const [zoom, setZoom] = useState(14);
 
-  const session = useSession()
+  const session = useSession();
 
   useEffect(() => {
     if (!map.isLoading && map.data) {
@@ -44,43 +45,42 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
     return <div>Map data is loading...</div>;
   }
 
-
   if (!session) {
     return (
       <div className="w-full">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
-        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-          <h1 className="text-[30px]">Edit Map</h1>
-        </CardHeader>
-        <CardBody>
-          <div className="space-y-1">
-            <FormSections
-              title={"Authorization failed!"}
-              description={"There is no valid session! Sign in again!"}
-            />
-          </div>
-        </CardBody>
-      </Card>
+          <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+            <h1 className="text-[30px]">Edit Map</h1>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-1">
+              <FormSections
+                title={"Authorization failed!"}
+                description={"There is no valid session! Sign in again!"}
+              />
+            </div>
+          </CardBody>
+        </Card>
       </div>
     );
   }
 
-  if(map.data === undefined){
+  if (map.data === undefined) {
     return (
       <div className="w-full">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
-        <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
-          <h1 className="text-[30px]">Edit Map</h1>
-        </CardHeader>
-        <CardBody>
-          <div className="space-y-1">
-            <FormSections
-              title={"The map does not exist!"}
-              description={"The map you wish to edit does not exist"}
-            />
-          </div>
-        </CardBody>
-      </Card>
+          <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+            <h1 className="text-[30px]">Edit Map</h1>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-1">
+              <FormSections
+                title={"The map does not exist!"}
+                description={"The map you wish to edit does not exist"}
+              />
+            </div>
+          </CardBody>
+        </Card>
       </div>
     );
   }
@@ -102,7 +102,6 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
           </CardBody>
         </Card>
         <br />
-        
       </div>
     );
   }
@@ -111,6 +110,10 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
     <div className="p-5 h-full overflow-hidden block">
       <Card className="w-full mobile:w-[400px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col">
+          <Link href={"/map"} className="pb-3 text-sm flex">
+            <BackIcon />
+            <span className="pl-3">{"back to list of maps"}</span>
+          </Link>
           <h1 className="text-[30px]">Edit Map</h1>
           <h2 className="text-primary font-bold">
             {map.data
@@ -127,7 +130,14 @@ export default function ViewMapPage(props: MarkerCreatePageProps) {
               }
             />
           </div>
-          <EditMapForm center={[center[0], center[1]]} zoom={zoom} fisheryAuthorityName={map.data?.map?.fisheryAuthority.fisheryAuthorityName} id={map.data?.map?.fisheryAuthority.id}/>
+          <EditMapForm
+            center={[center[0], center[1]]}
+            zoom={zoom}
+            fisheryAuthorityName={
+              map.data?.map?.fisheryAuthority.fisheryAuthorityName
+            }
+            id={map.data?.map?.fisheryAuthority.id}
+          />
         </CardBody>
       </Card>
       <Map

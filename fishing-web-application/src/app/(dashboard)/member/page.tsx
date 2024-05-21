@@ -53,8 +53,22 @@ export default async function MemberPage({
   if (session.user.role === "OPERATOR" || session?.user.role === "INSPECTOR" && access?.accessToAuthority) {
     return (
       <div className="p-5 h-full">
-        <h1 className="text-[30px] pb-5">Members</h1>
-        <h2 className="text-[20px] pb-5">Members Table</h2>
+        <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
+          <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+            <h1 className="text-[30px]">Members</h1>
+          </CardHeader>
+          <CardBody>
+            <div className="space-y-1">
+            <FormSections
+              title={"Members Table"}
+              description={
+                "The table shows the members of the association and their details. Members in the table can be modified and deleted"
+              }
+            />
+            <br />
+            </div>
+          </CardBody>
+        </Card>
         <MembersTable
           members={members.members}
           numberOfMembers={members.numberOfMembers._count.id}

@@ -80,7 +80,7 @@ export default function AuthorityTable({
       router={router}
       searchParams={searchParams}
       pathname={pathname}
-      emptyContent="No authority found"
+      emptyContent="No authories found"
     />
   );
 }

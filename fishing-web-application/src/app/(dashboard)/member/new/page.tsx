@@ -39,7 +39,7 @@ export default async function CreateLogbookPage() {
           <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
           <Link href={"/member"} className="pb-3 text-sm flex">
             <BackIcon />
-            <span className="pl-3">{"back to list of members"}</span>
+            <span className="pl-3 text-primary">{"back to list of members"}</span>
           </Link>
             <h1 className="text-[30px]">Create New Logbook</h1>
           </CardHeader>

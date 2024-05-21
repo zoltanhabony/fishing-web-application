@@ -1,9 +1,10 @@
 import { EditAuthorityForm } from "@/components/form/edit-authority-form";
 import notFound from "../not-found";
 import db from "@/lib/db";
-import { Card, CardBody, CardHeader } from "@nextui-org/react";
+import { Card, CardBody, CardHeader, Link } from "@nextui-org/react";
 import { FormSections } from "@/components/form/form-section";
 import { auth } from "@/auth";
+import { BackIcon } from "@/icons/back-icon";
 
 interface AuthorityEditPageProps {
   params: {
@@ -80,6 +81,10 @@ export default async function AuthorityEditPage(props: AuthorityEditPageProps) {
       <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
         <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
           <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+          <Link href={"/authority"} className="pb-3 text-sm flex">
+              <BackIcon />
+              <span className="pl-3">{"back to list of authorities"}</span>
+            </Link>
             <h1 className="text-[30px]">Edit Authority</h1>
             <h2 className="text-primary font-bold">
               {authority.fisheryAuthorityName}

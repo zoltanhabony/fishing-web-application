@@ -3,6 +3,7 @@ import { ParticipantCard } from "@/components/card/participants-card";
 import { ApplyTournamentForm } from "@/components/form/apply-tournament-form";
 import { DeregisterTournamentForm } from "@/components/form/deregister-tournament-form";
 import { FormSections } from "@/components/form/form-section";
+import { BackIcon } from "@/icons/back-icon";
 
 import db from "@/lib/db";
 import { Card, CardBody, CardHeader, Link } from "@nextui-org/react";
@@ -138,6 +139,10 @@ export default async function TournamentViewPage(
     <div className="w-full mobile:items-center sm:items-start h-max-full flex flex-col p-5 rounded-xl space-y-3">
       <Card className="w-full mobile:w-[450px] flex flex-col justify-center items-center shadow-none bg-transparent">
         <CardHeader className="mobile:block flex flex-col mobile:justify-between mobile:items-center">
+        <Link href={"/tournament"} className="pb-3 text-sm flex">
+            <BackIcon />
+            <span className="pl-3">{"back to list of tournaments"}</span>
+          </Link>
           <h1 className="text-[30px] pb-3">Tournament Details</h1>
           <FormSections
             title="View Tournament"
